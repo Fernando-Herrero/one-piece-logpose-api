@@ -1,20 +1,32 @@
 import { Router } from "express";
 import * as postsController from "./posts.controller.js";
+import {
+    createPostSchema,
+    postActionUserSchema,
+    postIdParamSchema,
+    shareTokenParamSchema,
+    updatePostSchema,
+    viewerQuerySchema,
+} from "./posts.schemas.js";
+import { validate } from "../../utils/validate.middleware.js";
 
 export const postRoutes: Router = Router();
 
-postRoutes.get("/", postsController.getAllPosts);
+const withPostId = validate(postIdParamSchema, "params");
+const withViewer = validate(viewerQuerySchema, "query");
 
-postRoutes.get("/user/:userId", postsController.getPostsByUser);
+postRoutes.get("/", withViewer, postsController.getAllPosts);
 
-postRoutes.get("/my-posts/:userId", postsController.getMyPosts);
+postRoutes.get("/share/:shareToken", validate(shareTokenParamSchema, "params"), withViewer, postsController.getPostByShareToken);
 
-postRoutes.get("/share/:shareToken", postsController.getPostByShareToken);
+postRoutes.get("/:id", withPostId, withViewer, postsController.getOnePost);
 
-postRoutes.get("/:id", postsController.getOnePost);
+postRoutes.post("/", validate(createPostSchema), postsController.createPost);
 
-postRoutes.post("/", postsController.createPost);
+postRoutes.patch("/:id", withPostId, validate(updatePostSchema), postsController.editPost);
 
-postRoutes.put("/:id", postsController.editPost);
+postRoutes.delete("/:id", withPostId, postsController.deletePost);
 
-postRoutes.delete("/:id", postsController.deletePost);
+postRoutes.post("/:id/like", withPostId, validate(postActionUserSchema), postsController.toggleLikePost);
+
+postRoutes.post("/:id/bookmark", withPostId, validate(postActionUserSchema), postsController.toggleBookmarkPost);
