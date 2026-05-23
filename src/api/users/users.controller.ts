@@ -5,7 +5,7 @@ import { Post } from "../posts/posts.model.js";
 import { Comment } from "../comments/comments.model.js";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { sendSuccess, sendError } from "../../utils/response.utils.js";
-import { pickFields } from "../../utils/pick-fields.js";
+import type { CreateUserInput, UpdateUserInput } from "./users.schemas.js";
 import {
     findUserById,
     isPrivacyDenied,
@@ -14,33 +14,6 @@ import {
     type PrivacyKey,
 } from "./users.helpers.js";
 import type { PrivacySettings } from "./users.types.js";
-
-/**
- * Campos editables vía PATCH /users/:id (solo perfil).
- *
- * TODO (auth + rutas dedicadas):
- * - verified      → POST /users/me/premium (token + comprobar pago)
- * - experience, unlockedCards, serieProgress → /api/progress
- * - followers, following → POST /users/:id/follow | unfollow
- * - password      → POST /auth/change-password
- * - role          → solo admin
- * - email         → ruta con verificación
- * - GET /users/me/* → requiere JWT (misma lógica que /:id pero con req.user.id)
- */
-const PROFILE_FIELDS = [
-    "username",
-    "firstName",
-    "lastName",
-    "displayName",
-    "bio",
-    "avatar",
-    "coverImage",
-    "phoneNumber",
-    "address",
-    "privacy",
-] as const;
-
-const REGISTER_FIELDS = [...PROFILE_FIELDS, "email", "password"] as const;
 
 const getId = (req: Request): string => req.params.id as string;
 
@@ -78,14 +51,15 @@ export const getOneUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
-    const payload = pickFields(req.body as Record<string, unknown>, REGISTER_FIELDS);
+    // Body ya validado por createUserSchema en la ruta (campos + .strict())
+    const payload = req.body as CreateUserInput;
     const newUser = await User.create(payload);
     return sendSuccess(res, newUser, "Usuario creado", 201);
 });
 
 export const editUser = asyncHandler(async (req: Request, res: Response) => {
     const id = getId(req);
-    const updates = pickFields(req.body as Record<string, unknown>, PROFILE_FIELDS);
+    const updates = req.body as UpdateUserInput;
 
     const user = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
 
