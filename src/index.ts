@@ -38,3 +38,17 @@ app.use(errorHandler);
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+/**
+ * AUTH PENDIENTE — cambios globales cuando exista JWT + middleware authenticate:
+ *
+ * - Identidad: req.user.id reemplaza userId en body (create/like/bookmark posts)
+ *   y viewerId en query (?viewerId=).
+ * - Rutas protegidas: POST/PATCH/DELETE en posts y users; like/bookmark; follow/unfollow.
+ * - Autoría: editar/borrar solo el propietario (req.user.id === autor) o admin.
+ * - Users: GET /users/me/*; PATCH/DELETE /users/:id solo perfil propio.
+ * - Feed y visibilidad: public / private / followers según req.user y following.
+ * - shareToken: la ruta se mantiene; definir acceso a posts privados vía enlace.
+ *
+ * Schemas Zod (users, posts, comments) marcan qué campos son temporales sin auth.
+ */
