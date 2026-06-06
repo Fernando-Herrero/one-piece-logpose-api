@@ -26,6 +26,24 @@ export function assertTextLength(text: string, verified: boolean): string | null
     return null;
 }
 
+export async function toggleField(postId: string, userId: mongoose.Types.ObjectId, field: "likes" | "bookmarks") {
+    const post = await findActivePostById(postId);
+    if (!post) return null;
+
+    const countField = `${field}Count` as "likesCount" | "bookmarksCount";
+    const alreadyHad = post[field].some((id) => id.equals(userId));
+
+    const updated = await Post.findByIdAndUpdate(
+        postId,
+        alreadyHad
+            ? { $pull: { [field]: userId }, $inc: { [countField]: -1 } }
+            : { $addToSet: { [field]: userId }, $inc: { [countField]: 1 } },
+        { new: true }
+    );
+
+    return { updated, alreadyHad };
+}
+
 type PostDoc = mongoose.Document & PostType;
 
 export function serializePost(post: PostDoc, viewerId?: string): Record<string, unknown> {

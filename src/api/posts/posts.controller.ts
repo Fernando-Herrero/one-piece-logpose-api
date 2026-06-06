@@ -1,76 +1,37 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import mongoose from "mongoose";
 import { randomUUID } from "crypto";
 import { Post } from "./posts.model.js";
-import { User } from "../users/users.model.js";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { sendSuccess, sendError } from "../../utils/response.utils.js";
 import type { CreatePostInput, PostActionUserInput, UpdatePostInput } from "./posts.schemas.js";
+import type { PostRequest } from "./posts.types.js";
 import {
-    assertTextLength,
-    findActivePostById,
     POST_AUTHOR_POPULATE,
     PUBLIC_POST_FILTER,
     serializePost,
     serializePosts,
+    toggleField,
 } from "./posts.helpers.js";
 
-const getId = (req: Request): string => req.params.id as string;
+const getViewerId = (req: PostRequest): string | undefined => (req.query as { viewerId?: string }).viewerId;
 
-const getViewerId = (req: Request): string | undefined =>
-    (req.query as { viewerId?: string }).viewerId;
+export const getAllPosts = asyncHandler(async (req: PostRequest, res: Response) => {
+    const posts = await Post.find(PUBLIC_POST_FILTER).sort({ createdAt: -1 }).populate(POST_AUTHOR_POPULATE);
 
-async function requireActivePostOr404(id: string, res: Response) {
-    const post = await findActivePostById(id);
-    if (!post) {
-        sendError(res, "Post no encontrado", 404);
-        return null;
-    }
-    return post;
-}
-
-export const getAllPosts = asyncHandler(async (req: Request, res: Response) => {
-    const viewerId = getViewerId(req);
-    const posts = await Post.find(PUBLIC_POST_FILTER)
-        .sort({ createdAt: -1 })
-        .populate(POST_AUTHOR_POPULATE);
-
-    return sendSuccess(res, serializePosts(posts, viewerId));
+    return sendSuccess(res, serializePosts(posts, getViewerId(req)));
 });
 
-export const getOnePost = asyncHandler(async (req: Request, res: Response) => {
-    const post = await Post.findOne({ _id: getId(req), isDeleted: false }).populate(POST_AUTHOR_POPULATE);
-
-    if (!post) {
-        return sendError(res, "Post no encontrado", 404);
-    }
-
-    return sendSuccess(res, serializePost(post, getViewerId(req)));
+export const getOnePost = asyncHandler(async (req: PostRequest, res: Response) => {
+    return sendSuccess(res, serializePost(req.post!, getViewerId(req)));
 });
 
-export const getPostByShareToken = asyncHandler(async (req: Request, res: Response) => {
-    const { shareToken } = req.params;
-    const post = await Post.findOne({ shareToken, isDeleted: false }).populate(POST_AUTHOR_POPULATE);
-
-    if (!post) {
-        return sendError(res, "Post no encontrado", 404);
-    }
-
-    return sendSuccess(res, serializePost(post, getViewerId(req)));
+export const getPostByShareToken = asyncHandler(async (req: PostRequest, res: Response) => {
+    return sendSuccess(res, serializePost(req.post!, getViewerId(req)));
 });
 
-export const createPost = asyncHandler(async (req: Request, res: Response) => {
+export const createPost = asyncHandler(async (req: PostRequest, res: Response) => {
     const payload = req.body as CreatePostInput;
-    const author = await User.findById(payload.userId);
-
-    if (!author) {
-        return sendError(res, "Usuario no encontrado", 404);
-    }
-
-    const textError = assertTextLength(payload.text, author.verified);
-    if (textError) {
-        return sendError(res, textError, 400);
-    }
 
     const newPost = await Post.create({
         text: payload.text,
@@ -84,24 +45,10 @@ export const createPost = asyncHandler(async (req: Request, res: Response) => {
     return sendSuccess(res, serializePost(newPost), "Post creado", 201);
 });
 
-export const editPost = asyncHandler(async (req: Request, res: Response) => {
-    const id = getId(req);
+export const editPost = asyncHandler(async (req: PostRequest, res: Response) => {
     const updates = req.body as UpdatePostInput;
 
-    if (updates.text) {
-        const post = await findActivePostById(id);
-        if (!post) {
-            return sendError(res, "Post no encontrado", 404);
-        }
-
-        const author = await User.findById(post.userId);
-        const textError = assertTextLength(updates.text, author?.verified ?? false);
-        if (textError) {
-            return sendError(res, textError, 400);
-        }
-    }
-
-    const post = await Post.findOneAndUpdate({ _id: id, isDeleted: false }, updates, {
+    const post = await Post.findOneAndUpdate({ _id: req.params.id, isDeleted: false }, updates, {
         new: true,
         runValidators: true,
     }).populate(POST_AUTHOR_POPULATE);
@@ -113,9 +60,9 @@ export const editPost = asyncHandler(async (req: Request, res: Response) => {
     return sendSuccess(res, serializePost(post), "Post actualizado");
 });
 
-export const deletePost = asyncHandler(async (req: Request, res: Response) => {
+export const deletePost = asyncHandler(async (req: PostRequest, res: Response) => {
     const post = await Post.findOneAndUpdate(
-        { _id: getId(req), isDeleted: false },
+        { _id: req.params.id, isDeleted: false },
         { isDeleted: true },
         { new: true }
     ).populate(POST_AUTHOR_POPULATE);
@@ -127,74 +74,32 @@ export const deletePost = asyncHandler(async (req: Request, res: Response) => {
     return sendSuccess(res, post, "Post eliminado");
 });
 
-export const toggleLikePost = asyncHandler(async (req: Request, res: Response) => {
-    const id = getId(req);
+export const toggleLikePost = asyncHandler(async (req: PostRequest, res: Response) => {
     const { userId } = req.body as PostActionUserInput;
     const userObjectId = new mongoose.Types.ObjectId(userId);
+    const result = await toggleField(req.params.id as string, userObjectId, "likes");
 
-    const post = await requireActivePostOr404(id, res);
-    if (!post) return;
+    if (!result?.updated) return sendError(res, "Post no encontrado", 404);
 
-    const alreadyLiked = post.likes.some((likeId) => likeId.equals(userObjectId));
-
-    const updated = await Post.findByIdAndUpdate(
-        id,
-        alreadyLiked
-            ? { $pull: { likes: userObjectId }, $inc: { likesCount: -1 } }
-            : { $addToSet: { likes: userObjectId }, $inc: { likesCount: 1 } },
-        { new: true }
-    );
-
-    if (!updated) {
-        return sendError(res, "Post no encontrado", 404);
-    }
-
-    if (updated.likesCount < 0) {
-        updated.likesCount = updated.likes.length;
-        await updated.save();
-    }
-
-    const liked = !alreadyLiked;
-
+    const added = !result.alreadyHad;
     return sendSuccess(res, {
-        liked,
-        likesCount: Math.max(0, updated.likesCount),
-        userLiked: liked,
+        liked: added,
+        likesCount: Math.max(0, result.updated.likesCount),
+        userLiked: added,
     });
 });
 
-export const toggleBookmarkPost = asyncHandler(async (req: Request, res: Response) => {
-    const id = getId(req);
+export const toggleBookmarkPost = asyncHandler(async (req: PostRequest, res: Response) => {
     const { userId } = req.body as PostActionUserInput;
     const userObjectId = new mongoose.Types.ObjectId(userId);
+    const result = await toggleField(req.params.id as string, userObjectId, "bookmarks");
 
-    const post = await requireActivePostOr404(id, res);
-    if (!post) return;
+    if (!result?.updated) return sendError(res, "Post no encontrado", 404);
 
-    const alreadyBookmarked = post.bookmarks.some((bookmarkId) => bookmarkId.equals(userObjectId));
-
-    const updated = await Post.findByIdAndUpdate(
-        id,
-        alreadyBookmarked
-            ? { $pull: { bookmarks: userObjectId }, $inc: { bookmarksCount: -1 } }
-            : { $addToSet: { bookmarks: userObjectId }, $inc: { bookmarksCount: 1 } },
-        { new: true }
-    );
-
-    if (!updated) {
-        return sendError(res, "Post no encontrado", 404);
-    }
-
-    if (updated.bookmarksCount < 0) {
-        updated.bookmarksCount = updated.bookmarks.length;
-        await updated.save();
-    }
-
-    const bookmarked = !alreadyBookmarked;
-
+    const added = !result.alreadyHad;
     return sendSuccess(res, {
-        bookmarked,
-        bookmarksCount: Math.max(0, updated.bookmarksCount),
-        userBookmarked: bookmarked,
+        bookmarked: added,
+        bookmarksCount: Math.max(0, result.updated.bookmarksCount),
+        userBookmarked: added,
     });
 });

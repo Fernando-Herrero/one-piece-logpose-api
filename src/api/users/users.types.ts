@@ -1,5 +1,6 @@
-import { Types } from "mongoose";
-
+import { Request } from "express";
+import mongoose, { Types } from "mongoose";
+import { UserRole } from "../auth/auth.types.js";
 export type SerieProgress = {
     saga: number;
     arc: number;
@@ -34,7 +35,7 @@ export type UserType = {
     avatar?: string;
     coverImage?: string;
     address?: string;
-    role: "user" | "admin";
+    role: UserRole;
     verified: boolean;
     isActive: boolean;
     experience: number;
@@ -46,4 +47,14 @@ export type UserType = {
     orders?: Types.ObjectId[];
     bookings?: Types.ObjectId[];
     fullName?: string;
+};
+
+export type UserDoc = mongoose.Document & UserType;
+
+/**
+ * Request enriquecida por middlewares de users.
+ * targetUser = perfil accedido vía :id (no confundir con req.user de auth JWT).
+ */
+export type UserRequest = Request & {
+    targetUser?: UserDoc;
 };

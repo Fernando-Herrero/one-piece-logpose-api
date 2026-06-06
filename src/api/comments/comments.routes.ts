@@ -1,33 +1,45 @@
 import { Router } from "express";
 import * as commentsController from "./comments.controller.js";
 import {
+    loadAuthorFromBody,
+    loadComment,
+    loadPostFromBody,
+    loadPostFromParams,
+    validateParentComment,
+} from "./comments.middlewares.js";
+import {
     commentActionUserSchema,
     commentIdParamSchema,
     createCommentSchema,
     postIdParamSchema,
     viewerQuerySchema,
 } from "./comments.schemas.js";
-import { validate } from "../../utils/validate.middleware.js";
+import { validate } from "../../middlewares/validate.middleware.js";
 
 export const commentRoutes: Router = Router();
 
 const withCommentId = validate(commentIdParamSchema, "params");
+const withPostId = validate(postIdParamSchema, "params");
 const withViewer = validate(viewerQuerySchema, "query");
+const withCreateComment = validate(createCommentSchema);
+const withActionUser = validate(commentActionUserSchema);
 
 commentRoutes.get(
     "/post/:postId",
-    validate(postIdParamSchema, "params"),
-    withViewer,
+    [withPostId, withViewer, loadPostFromParams],
     commentsController.getCommentsByPost
 );
 
-commentRoutes.post("/", validate(createCommentSchema), commentsController.createComment);
+commentRoutes.post(
+    "/",
+    [withCreateComment, loadPostFromBody, loadAuthorFromBody, validateParentComment],
+    commentsController.createComment
+);
 
-commentRoutes.delete("/:id", withCommentId, commentsController.deleteComment);
+commentRoutes.delete("/:id", [withCommentId, loadComment], commentsController.deleteComment);
 
 commentRoutes.post(
     "/:id/like",
-    withCommentId,
-    validate(commentActionUserSchema),
+    [withCommentId, withActionUser, loadComment],
     commentsController.toggleLikeComment
 );

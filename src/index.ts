@@ -6,7 +6,8 @@ import { commentRoutes } from "./api/comments/comments.routes.js";
 import db from "./config/db.js";
 import { userRoutes } from "./api/users/users.routes.js";
 import { sendSuccess } from "./utils/response.utils.js";
-import { errorHandler, notFoundHandler } from "./utils/error.middleware.js";
+import { errorHandler, notFoundHandler } from "./middlewares/error.middleware.js";
+import authRoutes from "./api/auth/auth.routes.js";
 
 db.connect();
 
@@ -25,6 +26,7 @@ app.get("/", (_req: Request, res: Response) => {
     return sendSuccess(res, null, "Server is running correctly");
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/comments", commentRoutes);

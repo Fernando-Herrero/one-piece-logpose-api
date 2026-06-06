@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodType } from "zod";
-import { sendError } from "./response.utils.js";
+import { sendError } from "../utils/response.utils.js";
 
 type ValidationTarget = "body" | "params" | "query";
 

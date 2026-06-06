@@ -1,4 +1,6 @@
-import { Types } from "mongoose";
+import { Request } from "express";
+import mongoose, { Types } from "mongoose";
+import type { UserType } from "../users/users.types.js";
 
 export type PostType = {
     _id: Types.ObjectId;
@@ -21,4 +23,13 @@ export type PostType = {
     hashtags: string[];
     mentions: string[];
     retweets: Types.ObjectId[];
+};
+
+export type PostDoc = mongoose.Document & PostType;
+export type PostAuthorDoc = mongoose.Document & UserType;
+
+/** Request enriquecida por middlewares de posts (loadPost, validateCreatePostAuthor, etc.). */
+export type PostRequest = Request & {
+    post?: PostDoc;
+    postAuthor?: PostAuthorDoc;
 };
