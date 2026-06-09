@@ -1,6 +1,7 @@
 import { Request } from "express";
 import mongoose, { Types } from "mongoose";
 import type { UserType } from "../users/users.types.js";
+import { AuthPayload } from "../auth/auth.types.js";
 
 export type PostType = {
     _id: Types.ObjectId;
@@ -32,4 +33,5 @@ export type PostAuthorDoc = mongoose.Document & UserType;
 export type PostRequest = Request & {
     post?: PostDoc;
     postAuthor?: PostAuthorDoc;
+    user?: AuthPayload;
 };

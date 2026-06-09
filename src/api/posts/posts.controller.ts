@@ -4,7 +4,7 @@ import { randomUUID } from "crypto";
 import { Post } from "./posts.model.js";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { sendSuccess, sendError } from "../../utils/response.utils.js";
-import type { CreatePostInput, PostActionUserInput, UpdatePostInput } from "./posts.schemas.js";
+import type { CreatePostInput, UpdatePostInput } from "./posts.schemas.js";
 import type { PostRequest } from "./posts.types.js";
 import {
     POST_AUTHOR_POPULATE,
@@ -14,7 +14,7 @@ import {
     toggleField,
 } from "./posts.helpers.js";
 
-const getViewerId = (req: PostRequest): string | undefined => (req.query as { viewerId?: string }).viewerId;
+const getViewerId = (req: PostRequest): string | undefined => req.user?.id;
 
 export const getAllPosts = asyncHandler(async (req: PostRequest, res: Response) => {
     const posts = await Post.find(PUBLIC_POST_FILTER).sort({ createdAt: -1 }).populate(POST_AUTHOR_POPULATE);
@@ -31,11 +31,13 @@ export const getPostByShareToken = asyncHandler(async (req: PostRequest, res: Re
 });
 
 export const createPost = asyncHandler(async (req: PostRequest, res: Response) => {
+    if (!req.user) return sendError(res, "No authorized, no user found", 401);
+
     const payload = req.body as CreatePostInput;
 
     const newPost = await Post.create({
         text: payload.text,
-        userId: payload.userId,
+        userId: req.user.id,
         images: payload.images,
         visibility: payload.visibility,
         shareToken: randomUUID(),
@@ -75,8 +77,9 @@ export const deletePost = asyncHandler(async (req: PostRequest, res: Response) =
 });
 
 export const toggleLikePost = asyncHandler(async (req: PostRequest, res: Response) => {
-    const { userId } = req.body as PostActionUserInput;
-    const userObjectId = new mongoose.Types.ObjectId(userId);
+    if (!req.user) return sendError(res, "No authorized, no user found", 401);
+
+    const userObjectId = new mongoose.Types.ObjectId(req.user.id);
     const result = await toggleField(req.params.id as string, userObjectId, "likes");
 
     if (!result?.updated) return sendError(res, "Post no encontrado", 404);
@@ -90,8 +93,9 @@ export const toggleLikePost = asyncHandler(async (req: PostRequest, res: Respons
 });
 
 export const toggleBookmarkPost = asyncHandler(async (req: PostRequest, res: Response) => {
-    const { userId } = req.body as PostActionUserInput;
-    const userObjectId = new mongoose.Types.ObjectId(userId);
+    if (!req.user) return sendError(res, "No authorized, no user found", 401);
+
+    const userObjectId = new mongoose.Types.ObjectId(req.user.id);
     const result = await toggleField(req.params.id as string, userObjectId, "bookmarks");
 
     if (!result?.updated) return sendError(res, "Post no encontrado", 404);

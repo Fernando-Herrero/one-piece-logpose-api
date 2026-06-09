@@ -19,11 +19,7 @@ const postFieldsSchema = z.object({
     isPinned: z.boolean().optional(),
 });
 
-export const createPostSchema = postFieldsSchema
-    .extend({
-        userId: objectIdSchema,
-    })
-    .strict();
+export const createPostSchema = postFieldsSchema.strict();
 
 export const updatePostSchema = postFieldsSchema
     .partial()
@@ -37,23 +33,8 @@ export const postIdParamSchema = z.object({
 });
 
 export const shareTokenParamSchema = z.object({
-    shareToken: z.string().uuid("Token de compartir no válido"),
+    shareToken: z.uuid("Token de compartir no válido"),
 });
-
-/** Hasta tener JWT: identifica quién da like/bookmark. */
-export const postActionUserSchema = z
-    .object({
-        userId: objectIdSchema,
-    })
-    .strict();
-
-/** Query opcional para marcar userLiked / userBookmarked en listados. */
-export const viewerQuerySchema = z
-    .object({
-        viewerId: objectIdSchema.optional(),
-    })
-    .strict();
 
 export type CreatePostInput = z.infer<typeof createPostSchema>;
 export type UpdatePostInput = z.infer<typeof updatePostSchema>;
-export type PostActionUserInput = z.infer<typeof postActionUserSchema>;
