@@ -1,6 +1,8 @@
 import { Request } from "express";
 import mongoose, { Types } from "mongoose";
 import { UserRole } from "../auth/auth.types.js";
+import { AuthPayload } from "../auth/auth.types.js";
+
 export type SerieProgress = {
     saga: number;
     arc: number;
@@ -57,4 +59,5 @@ export type UserDoc = mongoose.Document & UserType;
  */
 export type UserRequest = Request & {
     targetUser?: UserDoc;
+    user?: AuthPayload;
 };

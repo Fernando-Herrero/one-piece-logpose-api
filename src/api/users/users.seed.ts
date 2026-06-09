@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import db from "../../config/db.js";
 import { User } from "./users.model.js";
+import bcrypt from "bcrypt";
 
 const userData = [
     {
@@ -53,7 +54,13 @@ mongoose
     })
     .catch((error: unknown) => console.log("There was an error when deleting users.", error))
     .then(async () => {
-        await User.insertMany(userData);
+        const hashedUsers = await Promise.all(
+            userData.map(async (user) => ({
+                ...user,
+                password: await bcrypt.hash(user.password, 10),
+            }))
+        );
+        await User.insertMany(hashedUsers);
         console.log("Users added successfully!");
     })
     .catch((error: unknown) => console.log("Error adding users to database", error))

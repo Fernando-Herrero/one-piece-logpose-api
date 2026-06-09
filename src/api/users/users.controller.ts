@@ -5,7 +5,7 @@ import { Post } from "../posts/posts.model.js";
 import { Comment } from "../comments/comments.model.js";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { sendSuccess, sendError } from "../../utils/response.utils.js";
-import type { CreateUserInput, UpdateUserInput } from "./users.schemas.js";
+import type { UpdateUserInput } from "./users.schemas.js";
 import type { UserRequest } from "./users.types.js";
 import { POST_AUTHOR_SELECT, USER_PUBLIC_SELECT } from "./users.helpers.js";
 
@@ -16,12 +16,6 @@ export const getAllUsers = asyncHandler(async (_req: UserRequest, res: Response)
 
 export const getOneUser = asyncHandler(async (req: UserRequest, res: Response) => {
     return sendSuccess(res, req.targetUser!);
-});
-
-export const createUser = asyncHandler(async (req: UserRequest, res: Response) => {
-    const payload = req.body as CreateUserInput;
-    const newUser = await User.create(payload);
-    return sendSuccess(res, newUser, "Usuario creado", 201);
 });
 
 export const editUser = asyncHandler(async (req: UserRequest, res: Response) => {
@@ -101,19 +95,13 @@ export const getUserLikedPosts = asyncHandler(async (req: UserRequest, res: Resp
 export const getUserBookmarkedPosts = asyncHandler(async (req: UserRequest, res: Response) => {
     const id = req.params.id as string;
     const userObjectId = new mongoose.Types.ObjectId(id);
-    const posts = await Post.find({ bookmarks: userObjectId, isDeleted: false }).populate(
-        "userId",
-        POST_AUTHOR_SELECT
-    );
+    const posts = await Post.find({ bookmarks: userObjectId, isDeleted: false }).populate("userId", POST_AUTHOR_SELECT);
     return sendSuccess(res, posts);
 });
 
 export const getUserCommentedPosts = asyncHandler(async (req: UserRequest, res: Response) => {
     const id = req.params.id as string;
     const postIds = await Comment.distinct("postId", { author: id, isDeleted: false });
-    const posts = await Post.find({ _id: { $in: postIds }, isDeleted: false }).populate(
-        "userId",
-        POST_AUTHOR_SELECT
-    );
+    const posts = await Post.find({ _id: { $in: postIds }, isDeleted: false }).populate("userId", POST_AUTHOR_SELECT);
     return sendSuccess(res, posts);
 });
