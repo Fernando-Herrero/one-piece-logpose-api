@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { checkAuth } from "../auth/auth.middleware.js";
 import * as commentsController from "./comments.controller.js";
 import {
     loadAuthorFromBody,
@@ -6,40 +7,34 @@ import {
     loadPostFromBody,
     loadPostFromParams,
     validateParentComment,
+    assertCommentOwner,
 } from "./comments.middlewares.js";
-import {
-    commentActionUserSchema,
-    commentIdParamSchema,
-    createCommentSchema,
-    postIdParamSchema,
-    viewerQuerySchema,
-} from "./comments.schemas.js";
+import { commentIdParamSchema, createCommentSchema, postIdParamSchema } from "./comments.schemas.js";
 import { validate } from "../../middlewares/validate.middleware.js";
+import { optionalAuth } from "../auth/auth.middleware.js";
 
 export const commentRoutes: Router = Router();
 
 const withCommentId = validate(commentIdParamSchema, "params");
 const withPostId = validate(postIdParamSchema, "params");
-const withViewer = validate(viewerQuerySchema, "query");
 const withCreateComment = validate(createCommentSchema);
-const withActionUser = validate(commentActionUserSchema);
 
 commentRoutes.get(
     "/post/:postId",
-    [withPostId, withViewer, loadPostFromParams],
+    [optionalAuth, withPostId, loadPostFromParams],
     commentsController.getCommentsByPost
 );
 
 commentRoutes.post(
     "/",
-    [withCreateComment, loadPostFromBody, loadAuthorFromBody, validateParentComment],
+    [checkAuth, withCreateComment, loadPostFromBody, loadAuthorFromBody, validateParentComment],
     commentsController.createComment
 );
 
-commentRoutes.delete("/:id", [withCommentId, loadComment], commentsController.deleteComment);
-
-commentRoutes.post(
-    "/:id/like",
-    [withCommentId, withActionUser, loadComment],
-    commentsController.toggleLikeComment
+commentRoutes.delete(
+    "/:id",
+    [checkAuth, withCommentId, loadComment, assertCommentOwner],
+    commentsController.deleteComment
 );
+
+commentRoutes.post("/:id/like", [checkAuth, withCommentId, loadComment], commentsController.toggleLikeComment);

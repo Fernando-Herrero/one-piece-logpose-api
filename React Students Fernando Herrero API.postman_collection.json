@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "eeaaef24-1bea-42bb-9156-5a95abae0c53",
     "name": "React Students Fernando Herrero API",
-    "description": "Guía completa de la API.\n\nVariables de colección:\n- baseUrl (requerida) URL base de la API.\n- authToken (se autocompleta al hacer login).\n- userId (autocompletada en login/registro).\n- productId, postId, commentId, notificationId, cartId, bookingId, orderId (guardadas tras crear recursos).\n\nOrden recomendado:\n1. Auth > register/login\n2. Users (gestión de usuarios y seguimiento)\n3. Posts (publicaciones tipo Twitter)\n4. Comments (comentarios en posts)\n5. Notifications (sistema de notificaciones)\n6. Products (crear uno si necesitas productId)\n7. Carts (flujo de carrito) o Orders (pedido directo)\n8. Bookings (reservas)\n\nEstados & reglas resumidas:\n- Orders: pending -> preparing -> delivered | cancelled\n- Bookings: pending -> completed | cancelled\n- Posts: Visibilidad public|followers|private, soft delete\n- Comments: Soporte para respuestas anidadas, likes\n- Notifications: Tipos like|comment|follow|retweet|mention|bookmark, estado read\n\n📢 **NOTIFICACIONES AUTOMÁTICAS:**\nLas notificaciones se crean automáticamente desde la API cuando ocurren estas acciones:\n• Like en post/comment → notificación 'like' al autor\n• Bookmark en post → notificación 'bookmark' al autor\n• Comentario en post → notificación 'comment' al autor\n• Respuesta a comentario → notificación 'comment' al autor del comentario padre\n• Retweet → notificación 'retweet' al autor del post original\n• Mention (@username) → notificación 'mention' a usuarios mencionados\n• Follow → notificación 'follow' al usuario seguido\n\nEl frontend solo debe CONSULTAR notificaciones, no crearlas manualmente.\n\nTodas las fechas en respuestas están en ISO 8601.\nValores monetarios sin símbolo, en EUR.\n\nCada request incluye descripción de campos requeridos/ opcionales y ejemplos adicionales.",
+    "description": "Guía de la API LogPose (One Piece).\n\n**Auth JWT:** register/login → Bearer {{authToken}}. Respuestas: `{ status, message, data }`.\n\nVariables: baseUrl, authToken, userId, postId, commentId, …\n\nFlujo: Auth → Posts → Comments → Users.\n\n**Reglas auth actuales:**\n- Posts/comments mutaciones: JWT (sin userId/author en body)\n- GET posts/comments: Bearer opcional (userLiked flags)\n- PATCH/DELETE users/:id: solo perfil propio\n- Registro: POST /auth/register (no POST /users)\n\nRequests sin ruta en backend → 404 (follow, search, notifications, etc.).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "48301766"
   },
@@ -59,10 +59,11 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "if (pm.response.code === 201) {",
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
                   "  const json = pm.response.json();",
-                  "  if (json.token) pm.collectionVariables.set('authToken', json.token);",
-                  "  if (json.user && (json.user.id || json.user._id)) pm.collectionVariables.set('userId', json.user.id || json.user._id);",
+                  "  const data = json.data ?? json;",
+                  "  if (data.token) pm.collectionVariables.set('authToken', data.token);",
+                  "  if (data.user && (data.user.id || data.user._id)) pm.collectionVariables.set('userId', data.user.id || data.user._id);",
                   "}"
                 ]
               }
@@ -78,7 +79,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"testuser\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"displayName\": \"Test User\",\n  \"bio\": \"This is a test user account\",\n  \"password\": \"123456\",\n  \"avatar\": \"/pictures/user/custom-avatar.jpg\",\n  \"coverImage\": \"/pictures/user/cover.jpg\",\n  \"phoneNumber\": \"+34 600123123\",\n  \"address\": \"Calle Ejemplo 123, Madrid\"\n}"
+              "raw": "{\n  \"username\": \"testuser\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"email\": \"test@example.com\",\n  \"displayName\": \"Test User\",\n  \"bio\": \"This is a test user account\",\n  \"password\": \"123456\",\n  \"avatar\": \"/pictures/user/custom-avatar.jpg\",\n  \"coverImage\": \"/pictures/user/cover.jpg\",\n  \"phoneNumber\": \"+34 600123123\",\n  \"address\": \"Calle Ejemplo 123, Madrid\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
@@ -90,7 +91,7 @@
                 "register"
               ]
             },
-            "description": "**Crea un nuevo registro**\n\n---\n\n### Campos requeridos:\n- `name` (string): Nombre completo del usuario\n- `email` (string): Email único del usuario\n- `password` (string): Contraseña (mínimo 6 caracteres)\n\n### Campos opcionales:\n- `username` (string): Nombre de usuario único\n- `firstName` (string): Nombre\n- `lastName` (string): Apellido\n- `displayName` (string): Nombre a mostrar públicamente\n- `bio` (string): Biografía del usuario (máx. 500 caracteres)\n- `role` (string): Rol del usuario (user|admin|editor, default: user)\n- `avatar` (string): URL del avatar (default: /pictures/user/default-avatar.png)\n- `coverImage` (string): URL de imagen de portada del perfil\n- `phoneNumber` (string): Teléfono de contacto\n- `address` (string): Dirección del usuario\n- `verified` (boolean): Si está verificado (default: false)\n- `isActive` (boolean): Si está activo (default: true)\n- `experience` (number): Puntos de experiencia del usuario (default: 0)\n- `serieProgress` (object): Progreso en series del usuario (default: {saga:0, episode:0, arc:0})\n  - `saga` (number): Progreso en sagas (default: 0)\n  - `episode` (number): Progreso en episodios (default: 0)\n  - `arc` (number): Progreso en arcos (default: 0)\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 201 | Recurso creado exitosamente |\n| 400 | Datos de validación incorrectos |\n| 409 | Email o username ya existente |\n\n### Ejemplo de usuario admin:\n```json\n{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"123456\",\n  \"role\": \"admin\"\n}\n```\n\n### Notas importantes:\n- Se autocompletarán las variables de colección relevantes\n- El campo `password` nunca se retorna en las respuestas por seguridad\n- Los campos `experience` y `serieProgress` se inicializan automáticamente en 0\n- Este endpoint no requiere autenticación\n"
+            "description": "**Registra un nuevo usuario (público)**\n\n---\n\n### Campos requeridos:\n- `username` (string, min 3)\n- `firstName` (string, min 2)\n- `lastName` (string, min 2)\n- `email` (string, único)\n- `password` (string, min 6)\n\n### Campos opcionales:\n- `displayName`, `bio`, `avatar`, `coverImage`, `phoneNumber`, `address`, `privacy`\n\n### Respuesta (201):\nEnvelope `{ status, message, data: { token, user } }`. El script guarda `data.token` en `authToken`.\n\n### Notas:\n- No enviar `role` ni campos extra (schema `.strict()`)\n- Usa email distinto si el usuario ya existe\n- Password hasheada en servidor; no se devuelve en la respuesta\n"
           },
           "response": [
             {
@@ -114,7 +115,7 @@
               "_postman_previewlanguage": "json",
               "header": [],
               "cookie": [],
-              "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"message\": \"Usuario registrado exitosamente\",\n  \"user\": {\n    \"id\": \"6640dd...\",\n    \"username\": \"testuser\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\",\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"displayName\": \"Test User\",\n    \"bio\": \"This is a test user account\",\n    \"avatar\": \"/pictures/user/custom-avatar.jpg\",\n    \"coverImage\": \"/pictures/user/cover.jpg\",\n    \"role\": \"user\",\n    \"verified\": false,\n    \"phoneNumber\": \"+34 600123123\",\n    \"address\": \"Calle Ejemplo 123, Madrid\",\n    \"isActive\": true,\n    \"experience\": 0,\n    \"serieProgress\": {\n      \"saga\": 0,\n      \"episode\": 0,\n      \"arc\": 0\n    },\n    \"followers\": [],\n    \"following\": [],\n    \"createdAt\": \"2025-09-17T10:00:00.000Z\",\n    \"updatedAt\": \"2025-09-17T10:00:00.000Z\"\n  }\n}"
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"User registered successfully\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"user\": {\n      \"id\": \"6640dd...\",\n      \"username\": \"testuser\",\n      \"firstName\": \"Test\",\n      \"lastName\": \"User\",\n      \"email\": \"test@example.com\",\n      \"role\": \"user\",\n      \"isActive\": true\n    }\n  }\n}"
             }
           ]
         },
@@ -125,13 +126,12 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "// Guarda el token en variable de colección",
-                  "if (pm.response.code === 200) {",
-                  "  var json = pm.response.json();",
-                  "  if (json.token) { pm.collectionVariables.set('authToken', json.token); }",
-                  "  if (json.user && (json.user.id || json.user._id)) { pm.collectionVariables.set('userId', json.user.id || json.user._id); }",
-                  "}",
-                  ""
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  const data = json.data ?? json;",
+                  "  if (data.token) pm.collectionVariables.set('authToken', data.token);",
+                  "  if (data.user && (data.user.id || data.user._id)) pm.collectionVariables.set('userId', data.user.id || data.user._id);",
+                  "}"
                 ],
                 "type": "text/javascript"
               }
@@ -159,7 +159,7 @@
                 "login"
               ]
             },
-            "description": "**Autentica un usuario existente**\n\n---\n\n### Campos requeridos:\n- `email` (string): Email del usuario registrado\n- `password` (string): Contraseña del usuario\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Login exitoso - Retorna `{ token, user }` |\n| 400 | Datos de validación incorrectos |\n| 401 | Credenciales inválidas |\n\n### Notas importantes:\n- El token retornado debe usarse en el header `Authorization: Bearer <token>`\n- Se autocompletarán las variables `authToken` y `userId`\n- El objeto `user` incluye toda la información del perfil (excepto password)\n- Este endpoint no requiere autenticación previa"
+            "description": "**Inicia sesión con email y password**\n\n---\n\n### Campos requeridos:\n- `email` (string)\n- `password` (string)\n\n### Respuesta (200):\nEnvelope `{ status, message, data: { token, user } }`. El script guarda `data.token` en `authToken`.\n\n### Errores:\n- 401 Invalid email or password\n- 403 Account is not active\n\n### Notas:\n- Usuario debe estar registrado vía `/auth/register` (password hasheada)\n- Header para rutas protegidas: `Authorization: Bearer {{authToken}}`\n"
           },
           "response": [
             {
@@ -183,7 +183,7 @@
               "_postman_previewlanguage": "json",
               "header": [],
               "cookie": [],
-              "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"user\": {\n    \"id\": \"6640dd...\",\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"avatar\": {\n      \"url\": \"/pictures/user/default-avatar.png\",\n      \"alt\": \"Avatar por defecto\"\n    },\n    \"role\": \"user\",\n    \"phoneNumber\": \"+34 600123123\",\n    \"address\": \"Calle Ejemplo 123, Madrid\",\n    \"isActive\": true,\n    \"createdAt\": \"2025-09-17T10:00:00.000Z\",\n    \"updatedAt\": \"2025-09-17T10:00:00.000Z\"\n  }\n}"
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"user\": {\n      \"id\": \"6640dd...\",\n      \"username\": \"testuser\",\n      \"firstName\": \"Test\",\n      \"lastName\": \"User\",\n      \"email\": \"test@example.com\",\n      \"role\": \"user\",\n      \"isActive\": true\n    }\n  }\n}"
             }
           ]
         },
@@ -207,7 +207,7 @@
                 "me"
               ]
             },
-            "description": "**Lista todos los autenticacións del sistema**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Parámetros de consulta opcionales:\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Lista obtenida exitosamente |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n"
+            "description": "**Perfil del usuario autenticado**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n\n### Respuesta (200):\nEnvelope `{ status, message, data: <usuario> }` — el usuario está en `data`, no en `data.user`.\n\n### Errores:\n- 401 Denied access / Invalid token\n- 404 User not found\n"
           },
           "response": [
             {
@@ -231,12 +231,82 @@
               "_postman_previewlanguage": "json",
               "header": [],
               "cookie": [],
-              "body": "{\n  \"user\": {\n    \"id\": \"6640dd...\",\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"role\": \"user\",\n    \"phoneNumber\": \"+34 600123123\",\n    \"address\": \"Calle Ejemplo 123, Madrid\",\n    \"isActive\": true,\n    \"createdAt\": \"2025-09-17T10:00:00.000Z\",\n    \"updatedAt\": \"2025-09-17T10:00:00.000Z\"\n  }\n}"
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Profile obtained\",\n  \"data\": {\n    \"id\": \"6640dd...\",\n    \"username\": \"testuser\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\",\n    \"email\": \"test@example.com\",\n    \"role\": \"user\",\n    \"isActive\": true\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /auth/change-password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"123456\",\n  \"newPassword\": \"nueva123\",\n  \"repeatNewPassword\": \"nueva123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/change-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "change-password"
+              ]
+            },
+            "description": "**Cambia la contraseña del usuario autenticado**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n\n### Campos requeridos:\n- `currentPassword` (string)\n- `newPassword` (string, min 6)\n- `repeatNewPassword` (string, debe coincidir con newPassword)\n\n### Respuesta (200):\nEnvelope `{ status, message, data: null }`\n\n### Errores:\n- 401 Invalid current password / Denied access\n- 400 Validación (passwords no coinciden, etc.)\n"
+          },
+          "response": [
+            {
+              "name": "200 Password changed",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/change-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "change-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Password changed successfully\",\n  \"data\": null\n}"
             }
           ]
         },
         {
           "name": "POST /auth/logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.unset('authToken');",
+                  "  pm.collectionVariables.unset('userId');",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -255,7 +325,7 @@
                 "logout"
               ]
             },
-            "description": "**Crea un nuevo logout**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 201 | Recurso creado exitosamente |\n| 400 | Datos de validación incorrectos |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n- Se autocompletarán las variables de colección relevantes\n"
+            "description": "**Cierra sesión (JWT stateless)**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n\n### Respuesta (200):\n`{ status, message, data: null }`\n\nEl script Tests borra `authToken` y `userId` de la colección. El JWT sigue válido hasta expirar en servidor.\n"
           },
           "response": [
             {
@@ -279,12 +349,12 @@
               "_postman_previewlanguage": "json",
               "header": [],
               "cookie": [],
-              "body": "{\n  \"message\": \"Sesión cerrada exitosamente\",\n  \"logout\": true\n}"
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Logout successful\",\n  \"data\": null\n}"
             }
           ]
         }
       ],
-      "description": "Autenticación y gestión de sesión (JWT stateless).\nFlujo típico: register -> login -> usar Authorization Bearer en resto de endpoints protegidos.\nCampos usuario (modelo actualizado): username, firstName, lastName, name (string), email (string único), displayName, bio, password (hash interno), phoneNumber (string opcional), avatar (string), coverImage, address (string opcional), role (user|admin|editor), verified (bool), isActive (bool), followers[], following[], timestamps.\nSeguridad: password nunca se devuelve. Token incluye sub (user id) y role."
+      "description": "Autenticación JWT stateless.\n\nFlujo: **register** → **login** → `Authorization: Bearer {{authToken}}` en rutas protegidas → **logout** (limpia variables).\n\nRespuestas: envelope `{ status, message, data }`. Token en register/login: `data.token`, `data.user.id` → `userId`.\n\nRutas: POST register, POST login, GET me, PATCH change-password, POST logout.\n\nRegister: username, firstName, lastName, email, password (schema strict)."
     },
     {
       "name": "Users",
@@ -303,7 +373,7 @@
                 "users"
               ]
             },
-            "description": "**Lista todos los usuarios del sistema**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Parámetros de consulta opcionales:\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Lista obtenida exitosamente |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n- El campo `password` nunca se retorna en las respuestas por seguridad\n"
+            "description": "**Lista usuarios (público)**\n\n---\n\nNo requiere autenticación.\n\nRespuesta: envelope `{ status, message, data }` con array de usuarios (sin password).\n"
           },
           "response": [
             {
@@ -426,11 +496,15 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"newusername\",\n  \"firstName\": \"Nuevo\",\n  \"lastName\": \"Nombre\",\n  \"displayName\": \"Nuevo Nombre\",\n  \"bio\": \"Una nueva biografía\",\n  \"avatar\": \"/pictures/user/updated-avatar.jpg\",\n  \"coverImage\": \"/pictures/user/new-cover.jpg\",\n  \"verified\": true,\n  \"experience\": 150,\n  \"serieProgress\": {\n    \"saga\": 5,\n    \"episode\": 20,\n    \"arc\": 3\n  }\n}"
+              "raw": "{\n  \"displayName\": \"Nuevo Nombre\",\n  \"bio\": \"Una nueva biografía\",\n  \"avatar\": \"/pictures/user/updated-avatar.jpg\",\n  \"privacy\": {\n    \"showPosts\": true,\n    \"showLikes\": true,\n    \"showBookmarked\": true,\n    \"showComments\": true\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{userId}}",
@@ -442,7 +516,7 @@
                 "{{userId}}"
               ]
             },
-            "description": "**Actualiza usuario existente**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Parámetros de URL:\n- `id` (string): ID único del usuario\n\n### Campos opcionales editables:\n- `username` (string): Nombre de usuario único\n- `firstName` (string): Nombre\n- `lastName` (string): Apellido\n- `displayName` (string): Nombre a mostrar públicamente\n- `bio` (string): Biografía del usuario (máx. 500 caracteres)\n- `role` (string): Rol del usuario (user|admin|editor, default: user)\n- `avatar` (string): URL del avatar (default: /pictures/user/default-avatar.png)\n- `coverImage` (string): URL de imagen de portada del perfil\n- `phoneNumber` (string): Teléfono de contacto\n- `address` (string): Dirección del usuario\n- `verified` (boolean): Si está verificado (default: false)\n- `isActive` (boolean): Si está activo (default: true)\n- `experience` (number): Puntos de experiencia del usuario (default: 0, min: 0)\n- `serieProgress` (object): Progreso en series del usuario\n  - `saga` (number): Progreso en sagas (default: 0, min: 0)\n  - `episode` (number): Progreso en episodios (default: 0, min: 0)\n  - `arc` (number): Progreso en arcos (default: 0, min: 0)\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Recurso actualizado exitosamente |\n| 400 | Datos de validación incorrectos |\n| 404 | Recurso no encontrado |\n| 403 | Sin permisos para editar este recurso |\n| 401 | Token de autenticación inválido |\n\n### Permisos:\n- Los usuarios pueden editar su propio perfil\n- Los administradores pueden editar cualquier usuario\n\n### Notas importantes:\n- Requiere token de autenticación válido\n- El campo `password` nunca se retorna en las respuestas por seguridad\n- Al menos un campo debe estar presente en la petición\n- Se actualiza automáticamente el campo `updatedAt`\n- Los campos `experience` y `serieProgress` se inicializan automáticamente en 0\n"
+            "description": "**Actualiza perfil (solo el propio o admin)**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n- URL: `{{baseUrl}}/users/{{userId}}` (id debe coincidir con el JWT)\n\n### Campos editables (schema strict):\n- `username`, `firstName`, `lastName`, `displayName`, `bio`, `avatar`, `coverImage`, `phoneNumber`, `address`, `privacy`\n\n### No enviar:\n- `role`, `verified`, `experience`, `serieProgress`, `password` (password → PATCH /auth/change-password)\n\n### Respuestas:\n- 200 OK | 401 sin token | 403 otro perfil | 400 validación\n\nRegistro de usuarios nuevos: **POST /auth/register** (no POST /users).\n"
           },
           "response": [
             {
@@ -681,7 +755,12 @@
           "name": "DELETE /users/:id",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/users/{{userId}}",
               "host": [
@@ -1300,7 +1379,7 @@
           ]
         },
         {
-          "name": "PATCH /users/me/privacy",
+          "name": "PATCH /users/:id privacy (reemplaza /me/privacy)",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1315,20 +1394,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"showPosts\": false,\n  \"showLikes\": true,\n  \"showBookmarked\": false,\n  \"showComments\": true\n}"
+              "raw": "{\n  \"privacy\": {\n    \"showPosts\": false,\n    \"showLikes\": true,\n    \"showBookmarked\": false,\n    \"showComments\": true\n  }\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/users/me/privacy",
+              "raw": "{{baseUrl}}/users/{{userId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "users",
-                "me",
-                "privacy"
+                "{{userId}}"
               ]
             },
-            "description": "**Configura las opciones de privacidad del usuario autenticado**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Campos de privacidad opcionales:\n- `showPosts` (boolean): Si otros usuarios pueden ver tus posts (default: true)\n- `showLikes` (boolean): Si otros usuarios pueden ver posts que has dado like (default: true)\n- `showBookmarked` (boolean): Si otros usuarios pueden ver posts que has guardado (default: true)\n- `showComments` (boolean): Si otros usuarios pueden ver posts donde has comentado (default: true)\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Privacidad actualizada exitosamente |\n| 400 | Datos de validación incorrectos |\n| 401 | Token de autenticación inválido |\n\n### Efectos de la configuración:\n- `showPosts: false` → GET /users/:userId/posts devuelve 403 para otros usuarios\n- `showLikes: false` → GET /users/:userId/liked-posts devuelve 403 para otros usuarios\n- `showBookmarked: false` → GET /users/:userId/bookmarked-posts devuelve 403 para otros usuarios\n- `showComments: false` → GET /users/:userId/commented-posts devuelve 403 para otros usuarios\n- El endpoint GET /users/:userId/stats respeta todas las configuraciones de privacidad\n\n### Notas importantes:\n- Requiere token de autenticación válido\n- Solo puedes modificar tu propia configuración de privacidad\n- Los valores por defecto (true) mantienen compatibilidad con usuarios existentes\n- SIEMPRE puedes ver tu propio contenido independientemente de la configuración\n- Al menos un campo debe estar presente en la petición\n"
+            "description": "**Configura privacidad del perfil propio**\n\n---\n\nUsa **PATCH /users/{{userId}}** con objeto `privacy`. La ruta `/users/me/privacy` no existe en la API.\n\nRequiere JWT (assertSelf). Ver GET /users/:id/liked-posts para probar 403 vs dueño autenticado.\n"
           },
           "response": [
             {
@@ -1400,7 +1478,7 @@
           ]
         }
       ],
-      "description": "Gestión de usuarios con campos extendidos y sistema de privacidad.\nModelo actualizado: username, firstName, lastName, name, email, displayName, bio, password(hash interno), phoneNumber, avatar(string), coverImage, address, role, verified, isActive, followers[], following[], orders[], bookings[], privacy{}.\n\n🔒 **SISTEMA DE PRIVACIDAD:**\nCampo privacy: {showPosts, showLikes, showBookmarked, showComments} (todos Boolean, default: true)\nPermite a los usuarios controlar qué contenido es visible para otros:\n• PATCH /users/me/privacy - Configurar privacidad\n• GET /users/:userId/* - Protegidos por configuración de privacidad\n• 403 Forbidden - Cuando la privacidad bloquea el acceso\n• Los usuarios siempre pueden ver su propio contenido\n\nIncluye endpoints para seguir/no seguir usuarios y gestión de seguidores.\nNota: Algunos endpoints aún sin protección de rol (recomendado añadir auth)."
+      "description": "Usuarios y privacidad.\n\n**Auth:** PATCH/DELETE /users/:id requieren JWT + perfil propio (assertSelf). Registro solo vía /auth/register.\n\n**Privacidad:** privacy { showPosts, showLikes, showBookmarked, showComments }. GET /users/:id/liked-posts etc. → 403 si privado. Dueño con Bearer ve su contenido.\n\n**Pendiente en API:** follow/unfollow, GET /users/username/:username, GET /users/me/* (usar GET /auth/me).\n\nRequests marcados como no implementados pueden devolver 404."
     },
     {
       "name": "Comments",
@@ -1519,7 +1597,8 @@
                 "exec": [
                   "if (pm.response.code === 201) {",
                   "  const json = pm.response.json();",
-                  "  if (json.id) pm.collectionVariables.set('commentId', json.id);",
+                  "  const data = json.data ?? json;",
+                  "  if (data?.id) pm.collectionVariables.set('commentId', data.id);",
                   "}"
                 ]
               }
@@ -1550,7 +1629,7 @@
                 "comments"
               ]
             },
-            "description": "**Crea un nuevo comentario**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Campos requeridos:\n- `postId` (string): ID del post al que se hace el comentario\n- `text` (string): Contenido del comentario (máx. 280 caracteres)\n\n### Campos opcionales:\n- `images` (string): URLs de imágenes adjuntas\n- `parentCommentId` (string): ID del comentario padre (para respuestas anidadas)\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 201 | Recurso creado exitosamente |\n| 400 | Datos de validación incorrectos |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n- Se autocompletarán las variables de colección relevantes\n"
+            "description": "**Crea un nuevo comentario**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n\n### Campos requeridos:\n- `postId` (string)\n- `text` (string)\n\n### Campos opcionales:\n- `images`, `parentComment` (respuesta anidada)\n\n### No enviar:\n- `author` / `userId` (autor = JWT)\n\n### Respuestas:\n- 201 | 401 | 400\n"
           },
           "response": [
             {
@@ -1768,7 +1847,7 @@
           ]
         },
         {
-          "name": "DELETE /comments/:id/like",
+          "name": "DELETE /comments/:id/like (no implementado)",
           "request": {
             "method": "DELETE",
             "header": [
@@ -1788,7 +1867,7 @@
                 "like"
               ]
             },
-            "description": "**Quita like de comentario**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Parámetros de URL:\n- `id` (string): ID único del comentario\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Like eliminado exitosamente |\n| 404 | Comentario no encontrado |\n| 400 | Operación inválida |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n- Solo puedes quitar likes que hayas dado previamente\n- Se actualiza automáticamente el contador de likes\n"
+            "description": "**⚠️ No implementado.** Like en comentarios = toggle con **POST /comments/:id/like** (Bearer, body vacío). Repetir POST quita el like. Este DELETE → 404.\n"
           },
           "response": [
             {
@@ -2610,27 +2689,24 @@
           "name": "GET /posts",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "description": "Opcional: marca userLiked/userBookmarked para ti",
+                "disabled": false
+              }
+            ],
             "url": {
-              "raw": "{{baseUrl}}/posts?page=1&limit=20",
+              "raw": "{{baseUrl}}/posts",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "posts"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "20"
-                }
               ]
             },
-            "description": "**Lista todos los posts del sistema**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Parámetros de consulta opcionales:\n- `page` (number): Número de página (default: 1)\n- `limit` (number): Elementos por página (default: 10)\n- `userId` (string): Filtrar por usuario específico\n- `hashtag` (string): Filtrar por hashtag\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Lista obtenida exitosamente |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n"
+            "description": "**Lista posts públicos**\n\n---\n\n### Auth opcional:\n- Sin token: listado OK, sin flags personales\n- Con `Authorization: Bearer {{authToken}}`: `userLiked` / `userBookmarked` para el usuario del JWT\n\n### No usar:\n- `?viewerId=` (sustituido por JWT)\n\n### Respuestas:\n- 200 envelope `{ status, message, data }`\n"
           },
           "response": [
             {
@@ -2661,7 +2737,13 @@
           "name": "GET /posts/:id",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "description": "Opcional: flags userLiked/userBookmarked"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/posts/{{postId}}",
               "host": [
@@ -2672,7 +2754,7 @@
                 "{{postId}}"
               ]
             },
-            "description": "**Obtiene post específico**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Parámetros de URL:\n- `id` (string): ID único del post\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 200 | Recurso encontrado |\n| 404 | Recurso no encontrado |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n"
+            "description": "**Obtiene un post por ID**\n\n---\n\n### Auth opcional:\nBearer para `userLiked` / `userBookmarked` del usuario autenticado.\n\n### Respuestas:\n- 200 | 404\n"
           },
           "response": [
             {
@@ -2710,7 +2792,8 @@
                 "exec": [
                   "if (pm.response.code === 201) {",
                   "  const json = pm.response.json();",
-                  "  if (json.id || json._id) pm.collectionVariables.set('postId', json.id || json._id);",
+                  "  const data = json.data ?? json;",
+                  "  if (data?.id) pm.collectionVariables.set('postId', data.id);",
                   "}"
                 ]
               }
@@ -2741,7 +2824,7 @@
                 "posts"
               ]
             },
-            "description": "**Crea un nuevo post**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer <token>`\n\n### Campos requeridos:\n- `text` (string): Contenido del post (máx. 280 caracteres)\n\n### Campos opcionales:\n- `images` (string): URLs de imágenes adjuntas (máx. 4)\n- `visibility` (string): Visibilidad (public|followers|private, default: public)\n- `isReply` (string): Si es respuesta a otro post\n- `replyToPostId` (string): ID del post al que se responde\n- `hashtags` (string): Lista de hashtags sin el símbolo #\n- `mentions` (string): Lista de IDs de usuarios mencionados\n- `isPinned` (string): Si está fijado en el perfil\n- `location` (string): Ubicación geográfica del post\n\n### Respuestas:\n| Código | Descripción |\n|--------|-------------|\n| 201 | Recurso creado exitosamente |\n| 400 | Datos de validación incorrectos |\n| 401 | Token de autenticación inválido |\n\n### Notas importantes:\n- Requiere token de autenticación válido\n- Se autocompletarán las variables de colección relevantes\n"
+            "description": "**Crea un post (JWT)**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n\n### Body (sin userId — autor = JWT):\n- `text` (requerido), `images`, `visibility`, `isPinned`\n\n### Respuestas:\n- 201 | 401 | 400\n\nGuarda `postId` desde `data.id` en Tests.\n"
           },
           "response": [
             {
@@ -4596,7 +4679,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "https://eleven-code-api-fernando-herrero.vercel.app/api"
+      "value": "http://localhost:3000/api"
     },
     {
       "key": "authToken",

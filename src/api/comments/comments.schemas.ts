@@ -11,7 +11,6 @@ const objectIdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, "ID no válido");
 export const createCommentSchema = z
     .object({
         postId: objectIdSchema,
-        author: objectIdSchema,
         text: z.string().trim().min(1, "El texto es obligatorio"),
         images: z.array(z.string()).optional(),
         parentComment: objectIdSchema.optional(),
@@ -26,17 +25,4 @@ export const postIdParamSchema = z.object({
     postId: objectIdSchema,
 });
 
-export const commentActionUserSchema = z
-    .object({
-        userId: objectIdSchema,
-    })
-    .strict();
-
-export const viewerQuerySchema = z
-    .object({
-        viewerId: objectIdSchema.optional(),
-    })
-    .strict();
-
 export type CreateCommentInput = z.infer<typeof createCommentSchema>;
-export type CommentActionUserInput = z.infer<typeof commentActionUserSchema>;

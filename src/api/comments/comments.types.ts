@@ -2,6 +2,7 @@ import { Request } from "express";
 import mongoose, { Types } from "mongoose";
 import type { PostType } from "../posts/posts.types.js";
 import type { UserType } from "../users/users.types.js";
+import { AuthPayload } from "../auth/auth.types.js";
 
 export type CommentType = {
     _id: Types.ObjectId;
@@ -30,4 +31,5 @@ export type CommentRequest = Request & {
     post?: CommentPostDoc;
     comment?: CommentDoc;
     commentAuthor?: CommentAuthorDoc;
+    user?: AuthPayload;
 };

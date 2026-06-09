@@ -4,7 +4,7 @@ import { Comment } from "./comments.model.js";
 import { Post } from "../posts/posts.model.js";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { sendSuccess, sendError } from "../../utils/response.utils.js";
-import type { CommentActionUserInput, CreateCommentInput } from "./comments.schemas.js";
+import type { CreateCommentInput } from "./comments.schemas.js";
 import type { CommentRequest } from "./comments.types.js";
 import {
     ACTIVE_COMMENT_FILTER,
@@ -14,15 +14,16 @@ import {
     syncPostCommentsCount,
 } from "./comments.helpers.js";
 
-const getViewerId = (req: CommentRequest): string | undefined =>
-    (req.query as { viewerId?: string }).viewerId;
+const getViewerId = (req: CommentRequest): string | undefined => req.user?.id;
 
 export const createComment = asyncHandler(async (req: CommentRequest, res: Response) => {
+    if (!req.user) return sendError(res, "No authorized, no user found", 401);
+
     const payload = req.body as CreateCommentInput;
 
     const newComment = await Comment.create({
         postId: payload.postId,
-        author: payload.author,
+        author: req.user.id,
         text: payload.text,
         images: payload.images,
         parentComment: payload.parentComment,
@@ -36,7 +37,7 @@ export const createComment = asyncHandler(async (req: CommentRequest, res: Respo
     }
 
     const populated = await Comment.findById(newComment._id).populate(COMMENT_AUTHOR_POPULATE);
-    return sendSuccess(res, serializeComment(populated!), "Comentario creado", 201);
+    return sendSuccess(res, serializeComment(populated!), "Comment created", 201);
 });
 
 export const getCommentsByPost = asyncHandler(async (req: CommentRequest, res: Response) => {
@@ -63,14 +64,15 @@ export const deleteComment = asyncHandler(async (req: CommentRequest, res: Respo
     }
 
     await comment.populate(COMMENT_AUTHOR_POPULATE);
-    return sendSuccess(res, serializeComment(comment), "Comentario eliminado");
+    return sendSuccess(res, serializeComment(comment), "Comment deleted");
 });
 
 export const toggleLikeComment = asyncHandler(async (req: CommentRequest, res: Response) => {
+    if (!req.user) return sendError(res, "No authorized, no user found", 401);
+
     const comment = req.comment!;
     const id = comment._id.toString();
-    const { userId } = req.body as CommentActionUserInput;
-    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const userObjectId = new mongoose.Types.ObjectId(req.user.id);
 
     const alreadyLiked = comment.likes.some((likeId) => likeId.equals(userObjectId));
 
@@ -83,7 +85,7 @@ export const toggleLikeComment = asyncHandler(async (req: CommentRequest, res: R
     );
 
     if (!updated) {
-        return sendError(res, "Comentario no encontrado", 404);
+        return sendError(res, "Comment not found", 404);
     }
 
     if (updated.likesCount < 0) {

@@ -22,7 +22,7 @@ app.use(
     })
 );
 
-app.get("/", (_req: Request, res: Response) => {
+app.get("/api", (_req: Request, res: Response) => {
     return sendSuccess(res, null, "Server is running correctly");
 });
 
@@ -42,15 +42,20 @@ app.listen(PORT, () => {
 });
 
 /**
- * AUTH PENDIENTE — cambios globales cuando exista JWT + middleware authenticate:
+ * Auth JWT — estado actual:
  *
- * - Identidad: req.user.id reemplaza userId en body (create/like/bookmark posts)
- *   y viewerId en query (?viewerId=).
- * - Rutas protegidas: POST/PATCH/DELETE en posts y users; like/bookmark; follow/unfollow.
- * - Autoría: editar/borrar solo el propietario (req.user.id === autor) o admin.
- * - Users: GET /users/me/*; PATCH/DELETE /users/:id solo perfil propio.
- * - Feed y visibilidad: public / private / followers según req.user y following.
- * - shareToken: la ruta se mantiene; definir acceso a posts privados vía enlace.
+ * ✅ Hecho:
+ * - /api/auth: register, login, me, change-password, logout
+ * - Identidad vía req.user.id (checkAuth / optionalAuth)
+ * - Posts: create/edit/delete/like/bookmark protegidos; assertPostOwner
+ * - Comments: create/delete/like protegidos; assertCommentOwner
+ * - Users: PATCH/DELETE con assertSelf; POST /users eliminado (usar /auth/register)
+ * - GET posts/comments/users con optionalAuth; viewer = req.user?.id
+ * - assertPrivacy: dueño/admin bypass
  *
- * Schemas Zod (users, posts, comments) marcan qué campos son temporales sin auth.
+ * ⏳ Pendiente (futuro):
+ * - follow/unfollow usuarios
+ * - Feed con visibility followers|private
+ * - Acceso a posts privados vía shareToken
+ * - GET /users/me/* (hoy: GET /auth/me)
  */
