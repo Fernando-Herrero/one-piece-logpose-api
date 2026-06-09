@@ -20,6 +20,20 @@ export const checkAuth = asyncHandler(async (req: AuthRequest, res: Response, ne
     }
 });
 
+export const optionalAuth = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+        return next();
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as AuthPayload;
+        req.user = decoded;
+        next();
+    } catch {
+        return sendError(res, "Invalid or expired token", 401);
+    }
+});
+
 export const checkRole = (roles: UserRole[]) =>
     asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
         if (!req.user) return sendError(res, "Unauthorized, no user found", 401);

@@ -41,19 +41,50 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
         expiresIn: "1h",
     });
 
-    return sendSuccess(res, { user, token }, "Login successful", 200);
+    const userObj = user.toObject() as Record<string, unknown>;
+    delete userObj.password;
+
+    return sendSuccess(res, { user: userObj, token }, "Login successful", 200);
 });
 
 export const me = asyncHandler(async (req: AuthRequest, res: Response) => {
     if (!req.user) {
-        return sendError(res, "No autenticado", 401);
+        return sendError(res, "No authorized, no user found", 401);
     }
 
     const user = await User.findById(req.user.id);
 
     if (!user) {
-        return sendError(res, "Usuario no encontrado", 404);
+        return sendError(res, "User not found", 404);
     }
 
-    return sendSuccess(res, user, "Perfil obtenido");
+    return sendSuccess(res, user, "Profile obtained");
+});
+
+export const changePassword = asyncHandler(async (req: AuthRequest, res: Response) => {
+    if (!req.user) return sendError(res, "No authorized, no user found", 401);
+
+    const { currentPassword, newPassword } = req.body as {
+        currentPassword: string;
+        newPassword: string;
+    };
+
+    const user = await User.findById(req.user.id).select("+password");
+
+    if (!user) return sendError(res, "User not found", 404);
+
+    const isCurrentValid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isCurrentValid) return sendError(res, "Invalid current password", 401);
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    return sendSuccess(res, null, "Password changed successfully");
+});
+
+export const logout = asyncHandler(async (req: AuthRequest, res: Response) => {
+    if (!req.user) return sendError(res, "No authorized, no user found", 401);
+
+    return sendSuccess(res, null, "Logout successful");
 });
