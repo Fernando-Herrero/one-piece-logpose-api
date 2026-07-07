@@ -10,6 +10,7 @@ import {
 import { createPostSchema, postIdParamSchema, shareTokenParamSchema, updatePostSchema } from "./posts.schemas.js";
 import { validate } from "../../middlewares/validate.middleware.js";
 import { checkAuth, optionalAuth } from "../auth/auth.middleware.js";
+import { uploadPdf } from "../../config/cloudinary.js";
 
 export const postRoutes: Router = Router();
 
@@ -41,3 +42,9 @@ postRoutes.delete("/:id", [checkAuth, withPostId, loadPost, assertPostOwner], po
 postRoutes.post("/:id/like", [checkAuth, withPostId, loadPost], postsController.toggleLikePost);
 
 postRoutes.post("/:id/bookmark", [checkAuth, withPostId, loadPost], postsController.toggleBookmarkPost);
+
+postRoutes.patch(
+    "/:id/pdf",
+    [checkAuth, withPostId, loadPost, assertPostOwner, uploadPdf.single("pdf")],
+    postsController.updatePostPdf
+);

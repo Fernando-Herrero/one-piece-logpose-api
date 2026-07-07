@@ -23,11 +23,14 @@ export const notFoundHandler = (req: Request, _res: Response, next: NextFunction
 export const errorHandler = (err: HTTPError, req: Request, res: Response, next: NextFunction) => {
     const code = err.statusCode || 500;
 
+    if (err.message?.includes("Solo se permiten") || err.message?.includes("No se pueden subir")) {
+        return sendError(res, err.message, 400);
+    }
+
     // Log completo en servidor para depurar; el cliente recibe mensaje controlado.
     console.error(`[${req.method} ${req.originalUrl}]`, err);
 
-    const message =
-        code >= 500 ? "Error interno del servidor" : err.message || "Something went wrong in the server";
+    const message = code >= 500 ? "Error interno del servidor" : err.message || "Something went wrong in the server";
 
     return sendError(res, message, code);
 };

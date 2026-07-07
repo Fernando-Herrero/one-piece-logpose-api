@@ -20,6 +20,7 @@ const postSchema: Schema<PostType> = new Schema(
             default: "public",
         },
         shareToken: { type: String },
+        pdf: { type: String },
         isRetweet: { type: Boolean, default: false },
         isReply: { type: Boolean, default: false },
         isPinned: { type: Boolean, default: false },

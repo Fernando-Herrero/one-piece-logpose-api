@@ -21,6 +21,7 @@ export type PostType = {
     bookmarksCount: number;
     commentsCount: number;
     retweetsCount: number;
+    pdf?: string;
     hashtags: string[];
     mentions: string[];
     retweets: Types.ObjectId[];

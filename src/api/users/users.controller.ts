@@ -105,3 +105,16 @@ export const getUserCommentedPosts = asyncHandler(async (req: UserRequest, res: 
     const posts = await Post.find({ _id: { $in: postIds }, isDeleted: false }).populate("userId", POST_AUTHOR_SELECT);
     return sendSuccess(res, posts);
 });
+
+export const updateAvatar = asyncHandler(async (req: UserRequest, res: Response) => {
+    if (!req.file) return sendError(res, "No se ha enviado ninguna imagen", 400);
+
+    const user = await User.findByIdAndUpdate(
+        req.params.id,
+        { avatar: req.file.path },
+        { new: true, runValidators: true }
+    );
+
+    if (!user) return sendError(res, "Usuario no encontrado", 404);
+    return sendSuccess(res, user, "Avatar actualizado");
+});

@@ -1476,6 +1476,41 @@
               "body": "{\n  \"error\": \"No tienes permisos para acceder a este contenido debido a la configuración de privacidad del usuario\"\n}"
             }
           ]
+        },
+        {
+          "name": "PATCH /users/:id/avatar",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "avatar"
+              ]
+            },
+            "description": "**Sube/cambia el avatar del usuario (Multer + Cloudinary)**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n- Solo el propio perfil o admin (assertSelf).\n\n### Body (form-data):\n- Clave `avatar` de tipo **File** → seleccionar una imagen (jpg/png/webp...).\n- No añadir Content-Type manual: Postman genera el boundary de multipart.\n\n### Cómo funciona:\nMulter intercepta el archivo, lo sube a Cloudinary (carpeta `onepiece/avatars`) y guarda la URL pública en `avatar` (`req.file.path`).\n\n### Respuestas:\n- 200 Avatar actualizado | 400 sin imagen o formato no permitido | 401 sin token | 403 otro perfil | 404 usuario no encontrado\n"
+          },
+          "response": []
         }
       ],
       "description": "Usuarios y privacidad.\n\n**Auth:** PATCH/DELETE /users/:id requieren JWT + perfil propio (assertSelf). Registro solo vía /auth/register.\n\n**Privacidad:** privacy { showPosts, showLikes, showBookmarked, showComments }. GET /users/:id/liked-posts etc. → 403 si privado. Dueño con Bearer ve su contenido.\n\n**Pendiente en API:** follow/unfollow, GET /users/username/:username, GET /users/me/* (usar GET /auth/me).\n\nRequests marcados como no implementados pueden devolver 404."
@@ -3514,6 +3549,41 @@
               "body": "{\n  \"posts\": [],\n  \"pagination\": {\n    \"currentPage\": 1,\n    \"totalPages\": 0,\n    \"totalCount\": 0,\n    \"limit\": 20,\n    \"hasNextPage\": false,\n    \"hasPrevPage\": false,\n    \"nextPage\": null,\n    \"prevPage\": null\n  },\n  \"filters\": {\n    \"applied\": 2,\n    \"query\": {\n      \"q\": \"nonexistent\",\n      \"hashtag\": \"impossible\"\n    }\n  }\n}"
             }
           ]
+        },
+        {
+          "name": "PATCH /posts/:id/pdf",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "pdf",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/{{postId}}/pdf",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "{{postId}}",
+                "pdf"
+              ]
+            },
+            "description": "**Sube/cambia el PDF de un post (Multer + Cloudinary)**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n- Solo el dueño del post o admin (assertPostOwner).\n\n### Body (form-data):\n- Clave `pdf` de tipo **File** → seleccionar un archivo `.pdf`.\n- No añadir Content-Type manual: Postman genera el boundary de multipart.\n\n### Cómo funciona:\nMulter intercepta el archivo, valida que sea `application/pdf`, lo sube a Cloudinary (carpeta `onepiece/pdfs`) y guarda la URL pública en `pdf` (`req.file.path`).\n\n### Respuestas:\n- 200 PDF actualizado | 400 sin archivo o no es PDF | 401 sin token | 403 no eres el dueño | 404 post no encontrado\n"
+          },
+          "response": []
         }
       ],
       "description": "Gestión de publicaciones tipo Twitter.\nModelo Post: userId (ref User), text (<=280 chars), images[], likes[], bookmarks[], commentsCount, likesCount, bookmarksCount, originalPostId (ref Post), hashtags[], mentions[], retweets[], retweetsCount, isRetweet, isReply, replyToPostId, replyToUserId, visibility (public|followers|private), isPinned, isDeleted, source, language, location.\nIncluye endpoints para crear posts, like/unlike, bookmark, retweet, comentarios y búsqueda."

@@ -107,3 +107,16 @@ export const toggleBookmarkPost = asyncHandler(async (req: PostRequest, res: Res
         userBookmarked: added,
     });
 });
+
+export const updatePostPdf = asyncHandler(async (req: PostRequest, res: Response) => {
+    if (!req.file) return sendError(res, "No se ha enviado ningún PDF", 400);
+
+    const post = await Post.findOneAndUpdate(
+        { _id: req.params.id, isDeleted: false },
+        { pdf: req.file.path },
+        { new: true, runValidators: true }
+    ).populate(POST_AUTHOR_POPULATE);
+
+    if (!post) return sendError(res, "Post no encontrado", 404);
+    return sendSuccess(res, serializePost(post), "PDF actualizado");
+});
