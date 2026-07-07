@@ -5,7 +5,7 @@ import { asyncHandler } from "../../utils/async-handler.js";
 import { sendError } from "../../utils/response.utils.js";
 import { assertTextLength, POST_AUTHOR_POPULATE } from "./posts.helpers.js";
 import type { CreatePostInput, UpdatePostInput } from "./posts.schemas.js";
-import type { PostRequest } from "./posts.types.js";
+import type { PostAuthorDoc, PostRequest } from "./posts.types.js";
 
 export const loadPost = asyncHandler(async (req: PostRequest, res: Response, next: NextFunction) => {
     const post = await Post.findOne({ _id: req.params.id, isDeleted: false }).populate(POST_AUTHOR_POPULATE);
@@ -76,7 +76,10 @@ export const assertPostOwner = asyncHandler(async (req: PostRequest, res: Respon
     const post = req.post;
     if (!post) return sendError(res, "Post not found", 404);
 
-    const isOwner = post.userId.toString() === req.user.id;
+    const ownerId = post.populated("userId")
+        ? (post.userId as unknown as PostAuthorDoc)._id.toString()
+        : post.userId.toString();
+    const isOwner = ownerId === req.user.id;
     const isAdmin = req.user.role === "admin";
 
     if (!isOwner && !isAdmin) return sendError(res, "Unauthorized, you are not the owner of this post", 403);

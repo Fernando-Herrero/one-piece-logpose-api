@@ -29,7 +29,11 @@ postRoutes.get(
 
 postRoutes.get("/:id", [optionalAuth, withPostId, loadPost], postsController.getOnePost);
 
-postRoutes.post("/", [checkAuth, withCreatePost, validateCreatePostAuthor], postsController.createPost);
+postRoutes.post(
+    "/",
+    [checkAuth, uploadPdf.single("pdf"), withCreatePost, validateCreatePostAuthor],
+    postsController.createPost
+);
 
 postRoutes.patch(
     "/:id",

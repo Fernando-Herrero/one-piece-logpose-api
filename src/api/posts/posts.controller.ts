@@ -13,6 +13,7 @@ import {
     serializePosts,
     toggleField,
 } from "./posts.helpers.js";
+import { deleteFromCloudinary } from "../../config/cloudinary.js";
 
 const getViewerId = (req: PostRequest): string | undefined => req.user?.id;
 
@@ -40,6 +41,7 @@ export const createPost = asyncHandler(async (req: PostRequest, res: Response) =
         userId: req.user.id,
         images: payload.images,
         visibility: payload.visibility,
+        pdf: req.file?.path,
         shareToken: randomUUID(),
     });
 
@@ -110,6 +112,8 @@ export const toggleBookmarkPost = asyncHandler(async (req: PostRequest, res: Res
 
 export const updatePostPdf = asyncHandler(async (req: PostRequest, res: Response) => {
     if (!req.file) return sendError(res, "No se ha enviado ningún PDF", 400);
+
+    await deleteFromCloudinary(req.post?.pdf);
 
     const post = await Post.findOneAndUpdate(
         { _id: req.params.id, isDeleted: false },

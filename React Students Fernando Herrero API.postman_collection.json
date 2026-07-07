@@ -2818,7 +2818,7 @@
           ]
         },
         {
-          "name": "POST /posts",
+          "name": "POST /posts (JSON)",
           "event": [
             {
               "listen": "test",
@@ -2859,7 +2859,7 @@
                 "posts"
               ]
             },
-            "description": "**Crea un post (JWT)**\n\n---\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n\n### Body (sin userId — autor = JWT):\n- `text` (requerido), `images`, `visibility`, `isPinned`\n\n### Respuestas:\n- 201 | 401 | 400\n\nGuarda `postId` desde `data.id` en Tests.\n"
+            "description": "**Crea un post (JWT) — variante JSON**\n\n---\n\n### Cuándo usar esta variante:\nPost de solo texto (con `images` como URLs). Es la vía más rápida y legible cuando **no** adjuntas archivo.\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n\n### Body (sin userId — autor = JWT):\n- `text` (requerido), `images`, `visibility`, `isPinned`\n\n### Respuestas:\n- 201 | 401 | 400\n\nPara adjuntar un PDF al crear el post, usa **POST /posts (multipart, con PDF)**.\n\nGuarda `postId` desde `data.id` en Tests.\n"
           },
           "response": [
             {
@@ -2885,6 +2885,64 @@
               "body": "{\n  \"id\": \"6640ff...\",\n  \"userId\": {\n    \"id\": \"6640dd...\",\n    \"username\": \"testuser\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\",\n    \"displayName\": \"Test User\",\n    \"avatar\": \"https://api.dicebear.com/7.x/avataaars/svg?seed=testuser\",\n    \"verified\": false\n  },\n  \"text\": \"This is my new post! #excited #newfeatures\",\n  \"images\": [\"https://picsum.photos/800/600?random=1\"],\n  \"likes\": [],\n  \"bookmarks\": [],\n  \"likesCount\": 0,\n  \"commentsCount\": 0,\n  \"retweetsCount\": 0,\n  \"bookmarksCount\": 0,\n  \"hashtags\": [\"excited\", \"newfeatures\"],\n  \"mentions\": [],\n  \"isRetweet\": false,\n  \"visibility\": \"public\",\n  \"createdAt\": \"2025-09-18T10:05:00.000Z\",\n  \"updatedAt\": \"2025-09-18T10:05:00.000Z\"\n}"
             }
           ]
+        },
+        {
+          "name": "POST /posts (multipart, con PDF)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const json = pm.response.json();",
+                  "  const data = json.data ?? json;",
+                  "  if (data?.id) pm.collectionVariables.set('postId', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "text",
+                  "value": "Post con documento adjunto",
+                  "type": "text"
+                },
+                {
+                  "key": "pdf",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "visibility",
+                  "value": "public",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            },
+            "description": "**Crea un post (JWT) — variante multipart con PDF**\n\n---\n\n### Cuándo usar esta variante:\nCrear un post y **adjuntar un PDF en el mismo request**. Un archivo solo viaja en `multipart/form-data`, por eso este request usa form-data en lugar de JSON.\n\n### Autenticación requerida:\n- Header `Authorization: Bearer {{authToken}}`\n- **No** añadir `Content-Type` manual: Postman genera el boundary de multipart.\n\n### Body (form-data):\n- `text` (Text, requerido)\n- `pdf` (File, opcional) → seleccionar un archivo `.pdf`\n- `visibility` (Text, opcional: public|private|followers)\n\n### Cómo funciona:\nMulter intercepta el archivo, valida que sea `application/pdf`, lo sube a Cloudinary (carpeta `onepiece/pdfs`) y guarda la URL pública en `pdf` (`req.file.path`).\n\n### Respuestas:\n- 201 Post creado (con `pdf` relleno si se adjuntó) | 400 no es PDF | 401 sin token\n\nPara modificar el PDF de un post ya creado, usa **PATCH /posts/:id/pdf**.\n\nGuarda `postId` desde `data.id` en Tests.\n"
+          },
+          "response": []
         },
         {
           "name": "POST /posts/:id/like",

@@ -29,5 +29,21 @@ const createPdfUploader = (folder: string) =>
         limits: { fileSize: 10 * 1024 * 1024 },
     });
 
+export const deleteFromCloudinary = async (url?: string) => {
+    if (!url || !url.includes("res.cloudinary.com")) return;
+
+    const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.[^./]+$/);
+    if (!match) return;
+
+    const publicId = match[1];
+    const resourceType = url.includes("/raw/upload/") ? "raw" : "image";
+
+    try {
+        await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    } catch (error) {
+        console.error("No se pudo borrar el asset de Cloudinary:", publicId, error);
+    }
+};
+
 export const uploadAvatar = createImageUploader("onepiece/avatars");
 export const uploadPdf = createPdfUploader("onepiece/pdfs");

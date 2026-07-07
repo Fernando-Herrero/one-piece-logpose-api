@@ -8,6 +8,7 @@ import { sendSuccess, sendError } from "../../utils/response.utils.js";
 import type { UpdateUserInput } from "./users.schemas.js";
 import type { UserRequest } from "./users.types.js";
 import { POST_AUTHOR_SELECT, USER_PUBLIC_SELECT } from "./users.helpers.js";
+import { deleteFromCloudinary } from "../../config/cloudinary.js";
 
 export const getAllUsers = asyncHandler(async (_req: UserRequest, res: Response) => {
     const users = await User.find();
@@ -109,12 +110,13 @@ export const getUserCommentedPosts = asyncHandler(async (req: UserRequest, res: 
 export const updateAvatar = asyncHandler(async (req: UserRequest, res: Response) => {
     if (!req.file) return sendError(res, "No se ha enviado ninguna imagen", 400);
 
-    const user = await User.findByIdAndUpdate(
-        req.params.id,
-        { avatar: req.file.path },
-        { new: true, runValidators: true }
-    );
-
+    const user = await User.findById(req.params.id);
     if (!user) return sendError(res, "Usuario no encontrado", 404);
+
+    await deleteFromCloudinary(user.avatar);
+
+    user.avatar = req.file.path;
+    await user.save();
+
     return sendSuccess(res, user, "Avatar actualizado");
 });
