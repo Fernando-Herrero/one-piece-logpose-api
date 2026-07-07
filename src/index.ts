@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from "express";
+import helmet from "helmet";
 import cors from "cors";
 import "dotenv/config";
 import { postRoutes } from "./api/posts/posts.routes.js";
@@ -15,6 +16,8 @@ const app: Application = express();
 const PORT: number = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
+
+app.use(helmet());
 
 app.use(
     cors({
