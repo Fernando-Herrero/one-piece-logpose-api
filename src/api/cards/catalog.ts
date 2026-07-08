@@ -22,11 +22,25 @@ const catalogDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "../.
 
 let catalogCache: CatalogData | null = null;
 
+function getApiBaseUrl(): string {
+    const fromEnv = process.env.API_BASE_URL?.replace(/\/$/, "");
+    if (fromEnv) return fromEnv;
+    return `http://localhost:${process.env.PORT || "3000"}`;
+}
+
+export function resolveCardImageUrl(image: string): string {
+    if (image.startsWith("http://") || image.startsWith("https://")) return image;
+    const path = image.startsWith("/") ? image : `/${image}`;
+    return `${getApiBaseUrl()}${path}`;
+}
+
 function normalizeCard(card: CatalogCard): CatalogCard {
+    const imagePath = typeof card.image === "string" && card.image ? card.image : DEFAULT_CARD_IMAGE;
+
     return {
         ...card,
         name: typeof card.name === "string" ? card.name : "Unknown",
-        image: typeof card.image === "string" && card.image ? card.image : DEFAULT_CARD_IMAGE,
+        image: resolveCardImageUrl(imagePath),
     };
 }
 

@@ -24,7 +24,11 @@ const publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "../pu
 
 app.use(express.json());
 
-app.use(helmet());
+app.use(
+    helmet({
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+    })
+);
 
 app.use(
     cors({
@@ -33,6 +37,7 @@ app.use(
 );
 
 app.use(express.static(publicDir));
+app.use("/assets/images/cards", express.static(path.join(publicDir, "cards")));
 
 app.get("/api", (_req: Request, res: Response) => {
     return sendSuccess(res, null, "Server is running correctly");
