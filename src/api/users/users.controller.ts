@@ -27,7 +27,10 @@ export const getAllUsers = asyncHandler(async (_req: UserRequest, res: Response)
 export const getRanking = asyncHandler(async (req: UserRequest, res: Response) => {
     if (!req.user) return sendError(res, "No authorized, no user found", 401);
 
-    const users = await User.find().sort({ experience: -1 }).limit(RANKING_LIMIT).select(USER_PUBLIC_SELECT);
+    const users = await User.find()
+        .sort({ experience: -1 })
+        .limit(RANKING_LIMIT)
+        .select(`${USER_PUBLIC_SELECT} experience`);
 
     return sendSuccess(
         res,
