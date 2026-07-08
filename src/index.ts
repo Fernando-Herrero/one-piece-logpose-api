@@ -1,6 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import helmet from "helmet";
 import cors from "cors";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import "dotenv/config";
 import { postRoutes } from "./api/posts/posts.routes.js";
 import { commentRoutes } from "./api/comments/comments.routes.js";
@@ -18,6 +20,7 @@ db.connect();
 
 const app: Application = express();
 const PORT: number = Number(process.env.PORT) || 3000;
+const publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "../public");
 
 app.use(express.json());
 
@@ -28,6 +31,8 @@ app.use(
         // origin: ["http://localhost:1234", "miweb.com"]
     })
 );
+
+app.use(express.static(publicDir));
 
 app.get("/api", (_req: Request, res: Response) => {
     return sendSuccess(res, null, "Server is running correctly");

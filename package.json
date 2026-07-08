@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc && cp -r src/data dist/data",
+    "build": "tsc && cp -r src/data dist/data && cp -r public dist/public",
     "start": "node dist/index.js",
     "dev": "nodemon --watch src --ext ts --exec \"tsc && node dist/index.js\"",
     "usersSeed": "tsx src/api/users/users.seed.ts",
