@@ -1,0 +1,477 @@
+[
+  {
+    "id": 1,
+    "name": "Romance Dawn",
+    "description": "Luffy empieza su viaje, se convierte en pirata y forma la tripulación inicial enfrentando sus primeros desafíos.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 3,
+    "isFiller": false,
+    "firstEpisode": 1,
+    "lastEpisode": 3
+  },
+  {
+    "id": 2,
+    "name": "Orange Town",
+    "description": "Luffy y Zoro llegan a Orange Town, conocen a Nami y luchan para liberar el pueblo de Buggy el Payaso.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 5,
+    "isFiller": false,
+    "firstEpisode": 4,
+    "lastEpisode": 8
+  },
+  {
+    "id": 3,
+    "name": "Syrup Village",
+    "description": "La tripulación busca un barco y conoce a Usopp mientras enfrentan a los piratas Black Cat.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 10,
+    "isFiller": false,
+    "firstEpisode": 9,
+    "lastEpisode": 18
+  },
+  {
+    "id": 4,
+    "name": "Baratie",
+    "description": "El grupo visita un restaurante flotante en busca de un cocinero, Sanji se une, y surge conflicto con Don Krieg.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 12,
+    "isFiller": false,
+    "firstEpisode": 19,
+    "lastEpisode": 30
+  },
+  {
+    "id": 5,
+    "name": "Arlong Park",
+    "description": "El pasado de Nami se revela al enfrentarse al dominio de Arlong en su isla natal.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 14,
+    "isFiller": false,
+    "firstEpisode": 31,
+    "lastEpisode": 45
+  },
+  {
+    "id": 6,
+    "name": "Buggy Side Story (Filler)",
+    "description": "Pequeña historia paralela donde se muestran eventos de Buggy y su tripulación, con momentos ligeros y humorísticos.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 3,
+    "isFiller": true,
+    "firstEpisode": 46,
+    "lastEpisode": 47
+  },
+  {
+    "id": 7,
+    "name": "Loguetown",
+    "description": "Última parada antes de la Grand Line: Loguetown es lugar de confrontaciones previas al gran viaje.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 7,
+    "isFiller": false,
+    "firstEpisode": 48,
+    "lastEpisode": 53
+  },
+  {
+    "id": 8,
+    "name": "Warship Island (Filler)",
+    "description": "Una historia filler donde Luffy y su tripulación ayudan a una chica misteriosa mientras enfrentan piratas y secretos ocultos.",
+    "saga": "East Blue",
+    "sagaId": 1,
+    "totalEpisodes": 8,
+    "isFiller": true,
+    "firstEpisode": 54,
+    "lastEpisode": 61
+  },
+  {
+    "id": 9,
+    "name": "Reverse Mountain/Laboon",
+    "description": "La tripulación entra a la Grand Line enfrentando corrientes y descubre a Laboon, una ballena gigante con un misterioso vínculo.",
+    "saga": "Alabasta",
+    "sagaId": 2,
+    "totalEpisodes": 2,
+    "isFiller": false
+  },
+  {
+    "id": 10,
+    "name": "Whisky Peak",
+    "description": "Los Sombrero de Paja llegan a un pueblo festivo que oculta peligrosos secretos y enfrentan enemigos inesperados.",
+    "saga": "Alabasta",
+    "sagaId": 2,
+    "totalEpisodes": 4,
+    "isFiller": false
+  },
+  {
+    "id": 11,
+    "name": "Koby and Helmeppo (Filler)",
+    "description": "Pequeño arco centrado en Koby y Helmeppo, mostrando su desarrollo y crecimiento como marines.",
+    "saga": "Alabasta",
+    "sagaId": 2,
+    "totalEpisodes": 2,
+    "isFiller": true
+  },
+  {
+    "id": 12,
+    "name": "Little Garden",
+    "description": "La tripulación explora una isla prehistórica, donde se encuentran con dos gigantes guerreros y criaturas enormes.",
+    "saga": "Alabasta",
+    "sagaId": 2,
+    "totalEpisodes": 8,
+    "isFiller": false
+  },
+  {
+    "id": 13,
+    "name": "Drum Island",
+    "description": "Los Sombrero de Paja buscan un médico en una isla helada, enfrentando enfermedades y misterios locales.",
+    "saga": "Alabasta",
+    "sagaId": 2,
+    "totalEpisodes": 14,
+    "isFiller": false
+  },
+  {
+    "id": 14,
+    "name": "Alabasta",
+    "description": "Luffy y compañía ayudan a Vivi y al reino de Alabasta a detener una guerra provocada por Crocodile y sus subordinados.",
+    "saga": "Alabasta",
+    "sagaId": 2,
+    "totalEpisodes": 39,
+    "isFiller": false
+  },
+  {
+    "id": 15,
+    "name": "Post-Alabasta",
+    "description": "La tripulación reflexiona sobre lo ocurrido en Alabasta y prepara su siguiente etapa en la Grand Line.",
+    "saga": "Alabasta",
+    "sagaId": 2,
+    "totalEpisodes": 5,
+    "isFiller": false
+  },
+  {
+    "id": 16,
+    "name": "Goat Island (Filler)",
+    "description": "Un arco filler donde la tripulación visita una isla tranquila habitada por cabras y se generan situaciones cómicas y ligeras.",
+    "saga": "Sky Island",
+    "sagaId": 3,
+    "totalEpisodes": 3,
+    "isFiller": true
+  },
+  {
+    "id": 17,
+    "name": "Ruluka Island (Filler)",
+    "description": "Filler que sigue la aventura de los Sombrero de Paja en una isla misteriosa con habitantes singulares y pequeños conflictos.",
+    "saga": "Sky Island",
+    "sagaId": 3,
+    "totalEpisodes": 5,
+    "isFiller": true
+  },
+  {
+    "id": 18,
+    "name": "Jaya",
+    "description": "La tripulación llega a Jaya, donde descubren secretos del Nuevo Mundo y encuentran pistas sobre antiguas civilizaciones.",
+    "saga": "Sky Island",
+    "sagaId": 3,
+    "totalEpisodes": 9,
+    "isFiller": false
+  },
+  {
+    "id": 19,
+    "name": "Skypiea",
+    "description": "Los Sombrero de Paja ascienden a la isla del cielo, enfrentando conflictos divinos, misterios ancestrales y pruebas de fe.",
+    "saga": "Sky Island",
+    "sagaId": 3,
+    "totalEpisodes": 43,
+    "isFiller": false
+  },
+  {
+    "id": 20,
+    "name": "G-8 (Filler)",
+    "description": "Filler ambientado en una base marina fuertemente custodiada, donde la tripulación se infiltra y debe superar numerosos desafíos.",
+    "saga": "Sky Island",
+    "sagaId": 3,
+    "totalEpisodes": 11,
+    "isFiller": true
+  },
+  {
+    "id": 21,
+    "name": "Long Ring Long Land",
+    "description": "La tripulación se enfrenta a Foxy en un juego de retos y engaños que pone a prueba su ingenio y resistencia.",
+    "saga": "Water 7",
+    "sagaId": 4,
+    "totalEpisodes": 13,
+    "isFiller": false
+  },
+  {
+    "id": 22,
+    "name": "Ocean's Dream (Filler)",
+    "description": "Filler donde la tripulación pierde temporalmente la memoria y se desarrollan aventuras cómicas y ligeras.",
+    "saga": "Water 7",
+    "sagaId": 4,
+    "totalEpisodes": 5,
+    "isFiller": true
+  },
+  {
+    "id": 23,
+    "name": "Foxy's Return (Filler)",
+    "description": "Filler que muestra el regreso de Foxy y un nuevo enfrentamiento con la tripulación en desafíos de ingenio.",
+    "saga": "Water 7",
+    "sagaId": 4,
+    "totalEpisodes": 2,
+    "isFiller": true
+  },
+  {
+    "id": 24,
+    "name": "Water 7",
+    "description": "La tripulación llega a la ciudad portuaria de Water 7, donde enfrentan tensiones políticas y problemas internos mientras buscan un nuevo barco.",
+    "saga": "Water 7",
+    "sagaId": 4,
+    "totalEpisodes": 37,
+    "isFiller": false
+  },
+  {
+    "id": 25,
+    "name": "Enies Lobby",
+    "description": "Una misión de rescate audaz contra el gobierno mundial; la tripulación enfrenta enemigos poderosos y sus miedos más profundos.",
+    "saga": "Water 7",
+    "sagaId": 4,
+    "totalEpisodes": 46,
+    "isFiller": false
+  },
+  {
+    "id": 26,
+    "name": "Post-Enies Lobby",
+    "description": "Tras los eventos en Enies Lobby, la tripulación reflexiona, se recupera y se prepara para la siguiente etapa del viaje.",
+    "saga": "Water 7",
+    "sagaId": 4,
+    "totalEpisodes": 13,
+    "isFiller": false
+  },
+  {
+    "id": 27,
+    "name": "Ice Hunter (Filler)",
+    "description": "Filler donde la tripulación se enfrenta a cazadores de recompensas y situaciones cómicas durante sus viajes.",
+    "saga": "Thriller Bark",
+    "sagaId": 5,
+    "totalEpisodes": 10,
+    "isFiller": true
+  },
+  {
+    "id": 28,
+    "name": "Thriller Bark",
+    "description": "Los Sombrero de Paja llegan a una isla misteriosa con fantasmas y zombies, enfrentando peligros sobrenaturales y un enemigo poderoso.",
+    "saga": "Thriller Bark",
+    "sagaId": 5,
+    "totalEpisodes": 45,
+    "isFiller": false
+  },
+  {
+    "id": 29,
+    "name": "Spa Island (Filler)",
+    "description": "Filler corto donde la tripulación visita una isla de spa y se presentan situaciones cómicas y ligeras.",
+    "saga": "Thriller Bark",
+    "sagaId": 5,
+    "totalEpisodes": 3,
+    "isFiller": true
+  },
+  {
+    "id": 30,
+    "name": "Sabaody Archipelago",
+    "description": "La antesala del Nuevo Mundo: los Sombrero de Paja enfrentan fuerzas poderosas y barreras naturales.",
+    "saga": "Summit War",
+    "sagaId": 6,
+    "totalEpisodes": 23,
+    "isFiller": false
+  },
+  {
+    "id": 31,
+    "name": "Amazon Lily",
+    "description": "Luffy llega a una isla de mujeres guerreras y descubre más del mundo mientras busca a Ace.",
+    "saga": "Summit War",
+    "sagaId": 6,
+    "totalEpisodes": 10,
+    "isFiller": false
+  },
+  {
+    "id": 32,
+    "name": "Impel Down",
+    "description": "Luffy intenta infiltrarse en la prisión más temida para salvar a un ser querido.",
+    "saga": "Summit War",
+    "sagaId": 6,
+    "totalEpisodes": 31,
+    "isFiller": false
+  },
+  {
+    "id": 33,
+    "name": "Little East Blue (Filler)",
+    "description": "Filler donde la tripulación recuerda y revive breves aventuras pasadas antes de reunirse para nuevos desafíos.",
+    "saga": "Summit War",
+    "sagaId": 6,
+    "totalEpisodes": 4,
+    "isFiller": true
+  },
+  {
+    "id": 34,
+    "name": "Marineford",
+    "description": "Una batalla épica entre piratas, marines y fuerzas aliadas culmina en eventos que cambian el mundo.",
+    "saga": "Summit War",
+    "sagaId": 6,
+    "totalEpisodes": 33,
+    "isFiller": false
+  },
+  {
+    "id": 35,
+    "name": "Post-War",
+    "description": "El mundo tras Marineford, con heridos, pérdidas y nuevas direcciones para la tripulación.",
+    "saga": "Summit War",
+    "sagaId": 6,
+    "totalEpisodes": 27,
+    "isFiller": false
+  },
+  {
+    "id": 36,
+    "name": "Return to Sabaody",
+    "description": "Después del salto de tiempo, los Sombrero de Paja regresan a Sabaody para reencontrarse y retomar su viaje.",
+    "saga": "Fish-Man Island",
+    "sagaId": 7,
+    "totalEpisodes": 6,
+    "isFiller": false
+  },
+  {
+    "id": 37,
+    "name": "Fish-Man Island",
+    "description": "Exploración bajo el mar, culturas olvidadas y confrontaciones que revelan verdades profundas.",
+    "saga": "Fish-Man Island",
+    "sagaId": 7,
+    "totalEpisodes": 52,
+    "isFiller": false
+  },
+  {
+    "id": 38,
+    "name": "Z's Ambition (Filler)",
+    "description": "Filler donde la tripulación enfrenta la amenaza de un misterioso villano mientras continúan su viaje hacia el Nuevo Mundo.",
+    "saga": "Dressrosa",
+    "sagaId": 8,
+    "totalEpisodes": 4,
+    "isFiller": true
+  },
+  {
+    "id": 39,
+    "name": "Punk Hazard",
+    "description": "La tripulación llega a una isla dividida entre fuego y hielo, enfrentando experimentos peligrosos y alianzas inesperadas.",
+    "saga": "Dressrosa",
+    "sagaId": 8,
+    "totalEpisodes": 47,
+    "isFiller": false
+  },
+  {
+    "id": 40,
+    "name": "Caesar Retrieval (Filler)",
+    "description": "Filler donde los Sombrero de Paja buscan rescatar a Caesar Clown mientras enfrentan obstáculos cómicos y peligros moderados.",
+    "saga": "Dressrosa",
+    "sagaId": 8,
+    "totalEpisodes": 3,
+    "isFiller": true
+  },
+  {
+    "id": 41,
+    "name": "Dressrosa",
+    "description": "Lucha contra un señor corrupto que ha manipulado un reino entero, con muchos aliados nuevos y sacrificios.",
+    "saga": "Dessrosa",
+    "sagaId": 8,
+    "totalEpisodes": 118,
+    "isFiller": false
+  },
+  {
+    "id": 42,
+    "name": "Silver Mine (Filler)",
+    "description": "Filler donde la tripulación se enfrenta a ladrones y trampas en una mina mientras buscan provisiones y aventuras.",
+    "saga": "Whole Cake Island",
+    "sagaId": 9,
+    "totalEpisodes": 4,
+    "isFiller": true
+  },
+  {
+    "id": 43,
+    "name": "Zou",
+    "description": "La tripulación llega a la isla sobre elefante gigante, descubre secretos sobre los Poneglyph y se prepara para enfrentar nuevos desafíos.",
+    "saga": "Whole Cake Island",
+    "sagaId": 9,
+    "totalEpisodes": 29,
+    "isFiller": false
+  },
+  {
+    "id": 44,
+    "name": "Marine Rookie (Filler)",
+    "description": "Filler donde los Sombrero de Paja se infiltran en una base marina de poca relevancia y enfrentan situaciones cómicas.",
+    "saga": "Whole Cake Island",
+    "sagaId": 9,
+    "totalEpisodes": 3,
+    "isFiller": true
+  },
+  {
+    "id": 45,
+    "name": "Whole Cake Island",
+    "description": "Sanji es separado de la tripulación y los Sombrero de Paja se adentran en territorio de Big Mom, enfrentando alianzas peligrosas y desafíos mortales.",
+    "saga": "Whole Cake Island",
+    "sagaId": 9,
+    "totalEpisodes": 95,
+    "isFiller": false
+  },
+  {
+    "id": 46,
+    "name": "Levely",
+    "description": "Congreso mundial donde se reúnen las grandes potencias, con tensiones políticas crecientes; ligado directamente a la Whole Cake Island saga.",
+    "saga": "Whole Cake Island",
+    "sagaId": 9,
+    "totalEpisodes": 12,
+    "isFiller": false
+  },
+  {
+    "id": 47,
+    "name": "Wano Country (Part 1)",
+    "description": "La tripulación llega a Wano, un país aislado de samuráis, y empieza a descubrir sus tradiciones y conflictos internos.",
+    "saga": "Wano",
+    "sagaId": 10,
+    "totalEpisodes": 5,
+    "isFiller": false
+  },
+  {
+    "id": 48,
+    "name": "Cidre Guild (Filler)",
+    "description": "Filler donde la tripulación se enfrenta a un grupo de delincuentes mientras continúan sus aventuras en el Nuevo Mundo.",
+    "saga": "Wano",
+    "sagaId": 10,
+    "totalEpisodes": 2,
+    "isFiller": true
+  },
+  {
+    "id": 49,
+    "name": "Wano Country (Part 2)",
+    "description": "La tripulación continúa su lucha contra los aliados del Shogun y empieza a formar estrategias para derrotar al enemigo principal.",
+    "saga": "Wano",
+    "sagaId": 10,
+    "totalEpisodes": 127,
+    "isFiller": false
+  },
+  {
+    "id": 50,
+    "name": "Uta's Past (Filler)",
+    "description": "Filler que explora los recuerdos y la historia de Uta, revelando su pasado antes de los eventos actuales en Wano.",
+    "saga": "Wano",
+    "sagaId": 10,
+    "totalEpisodes": 2,
+    "isFiller": true
+  },
+  {
+    "id": 51,
+    "name": "Wano Country (Part 3)",
+    "description": "La batalla final en Wano se intensifica, con enfrentamientos épicos y revelaciones cruciales que definirán el futuro del país y la tripulación.",
+    "saga": "Wano",
+    "sagaId": 10,
+    "totalEpisodes": 106,
+    "isFiller": false
+  }
+]

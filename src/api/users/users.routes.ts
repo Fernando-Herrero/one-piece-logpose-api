@@ -3,7 +3,7 @@ import * as usersController from "./users.controller.js";
 import { assertPrivacy, assertSelf, loadUser } from "./users.middlewares.js";
 import { updateUserSchema, userIdParamSchema } from "./users.schemas.js";
 import { validate } from "../../middlewares/validate.middleware.js";
-import { checkAuth, optionalAuth } from "../auth/auth.middleware.js";
+import { checkAuth, checkRole, optionalAuth } from "../auth/auth.middleware.js";
 import { uploadAvatar } from "../../config/cloudinary.js";
 
 export const userRoutes: Router = Router();
@@ -11,7 +11,8 @@ export const userRoutes: Router = Router();
 const withId = validate(userIdParamSchema, "params");
 const withUpdateUser = validate(updateUserSchema);
 
-userRoutes.get("/", usersController.getAllUsers);
+userRoutes.get("/", [checkAuth, checkRole(["admin"])], usersController.getAllUsers);
+userRoutes.get("/ranking", [checkAuth], usersController.getRanking);
 
 userRoutes.get("/:id/stats", [withId, loadUser], usersController.getUserStats);
 userRoutes.get("/:id/followers", [withId, loadUser], usersController.getUserFollowers);
@@ -36,6 +37,9 @@ userRoutes.get(
     [optionalAuth, withId, loadUser, assertPrivacy("showComments")],
     usersController.getUserCommentedPosts
 );
+
+userRoutes.post("/:id/follow", [checkAuth, withId, loadUser], usersController.followUser);
+userRoutes.post("/:id/unfollow", [checkAuth, withId, loadUser], usersController.unfollowUser);
 
 userRoutes.get("/:id", [withId, loadUser], usersController.getOneUser);
 

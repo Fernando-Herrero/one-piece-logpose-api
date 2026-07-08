@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "name": "Alvida's ship",
+    "type": "common",
+    "crew": [
+      "Alvida"
+    ],
+    "description": "Standard pirate ship",
+    "image": "/cards/alvida-ship.webp"
+  },
+  {
+    "id": 2,
+    "name": "Red Force",
+    "type": "legendary",
+    "crew": [
+      "Shanks",
+      "Red Hair Pirates"
+    ],
+    "description": "Yonko flagship",
+    "image": "/cards/red-force.webp"
+  },
+  {
+    "id": 3,
+    "name": "Big Top",
+    "type": "rare",
+    "crew": [
+      "Buggy",
+      "Mohji",
+      "Cabaji",
+      "Richie"
+    ],
+    "description": "Buggy's circus-themed ship",
+    "image": "/cards/big-top.webp"
+  },
+  {
+    "id": 4,
+    "name": "Bezan Black",
+    "type": "uncommon",
+    "crew": [
+      "Kuro",
+      "Jango",
+      "Sham",
+      "Buchi"
+    ],
+    "description": "Black Cat Pirates' ship"
+  },
+  {
+    "id": 5,
+    "name": "Going Merry",
+    "type": "legendary",
+    "crew": [
+      "Straw Hat Pirates"
+    ],
+    "description": "Straw Hat Pirates' first ship, gift from Kaya"
+  },
+  {
+    "id": 6,
+    "name": "Baratie",
+    "type": "legendary",
+    "crew": [
+      "Zeff",
+      "Sanji",
+      "Patty",
+      "Carne"
+    ],
+    "description": "Sea restaurant ship"
+  },
+  {
+    "id": 7,
+    "name": "Dreadnaught Sabre",
+    "type": "rare",
+    "crew": [
+      "Don Krieg",
+      "Pearl",
+      "Gin"
+    ],
+    "description": "Krieg Pirates' flagship"
+  },
+  {
+    "id": 8,
+    "name": "Coffin Boat",
+    "type": "legendary",
+    "crew": [
+      "Dracule Mihawk"
+    ],
+    "description": "Mihawk's personal vessel"
+  },
+  {
+    "id": 9,
+    "name": "Marine ships",
+    "type": "common",
+    "crew": [
+      "Various Marines"
+    ],
+    "description": "Standard Marine vessels"
+  },
+  {
+    "id": 10,
+    "name": "Nezumi's ship",
+    "type": "common",
+    "crew": [
+      "Captain Nezumi",
+      "Corrupt Marines"
+    ],
+    "description": "Corrupt Marine vessel"
+  },
+  {
+    "id": 11,
+    "name": "Smoker's ship",
+    "type": "rare",
+    "crew": [
+      "Smoker",
+      "Tashigi",
+      "Marines"
+    ],
+    "description": "Marine Captain's vessel"
+  },
+  {
+    "id": 12,
+    "name": "Nelson's warship",
+    "type": "rare",
+    "crew": [
+      "Admiral Nelson",
+      "Eric",
+      "Marines"
+    ],
+    "description": "Marine Admiral's flagship (filler)"
+  },
+  {
+    "id": 13,
+    "name": "Shark Superb",
+    "type": "uncommon",
+    "crew": [
+      "Arlong",
+      "Kuroobi",
+      "Chu",
+      "Hatchan"
+    ],
+    "description": "Arlong Pirates' ship"
+  }
+]

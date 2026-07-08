@@ -5,7 +5,7 @@ import { Post } from "./posts.model.js";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { sendSuccess, sendError } from "../../utils/response.utils.js";
 import type { CreatePostInput, UpdatePostInput } from "./posts.schemas.js";
-import type { PostRequest } from "./posts.types.js";
+import type { CreatePostRequest, PostRequest } from "./posts.types.js";
 import {
     POST_AUTHOR_POPULATE,
     PUBLIC_POST_FILTER,
@@ -14,6 +14,15 @@ import {
     toggleField,
 } from "./posts.helpers.js";
 import { deleteFromCloudinary } from "../../config/cloudinary.js";
+import { createNotification } from "../notifications/notifications.model.js";
+import type { PostAuthorDoc } from "./posts.types.js";
+
+const getPostOwnerId = (post: PostRequest["post"]) => {
+    if (!post) return undefined;
+    return post.populated("userId")
+        ? (post.userId as unknown as PostAuthorDoc)._id.toString()
+        : post.userId.toString();
+};
 
 const getViewerId = (req: PostRequest): string | undefined => req.user?.id;
 
@@ -31,17 +40,20 @@ export const getPostByShareToken = asyncHandler(async (req: PostRequest, res: Re
     return sendSuccess(res, serializePost(req.post!, getViewerId(req)));
 });
 
-export const createPost = asyncHandler(async (req: PostRequest, res: Response) => {
+export const createPost = asyncHandler(async (req: CreatePostRequest, res: Response) => {
     if (!req.user) return sendError(res, "No authorized, no user found", 401);
 
     const payload = req.body as CreatePostInput;
 
+    const uploadedImages = req.files?.images?.map((file) => file.path) ?? [];
+    const images = [...(payload.images ?? []), ...uploadedImages];
+
     const newPost = await Post.create({
         text: payload.text,
         userId: req.user.id,
-        images: payload.images,
+        images,
         visibility: payload.visibility,
-        pdf: req.file?.path,
+        pdf: req.files?.pdf?.[0]?.path,
         shareToken: randomUUID(),
     });
 
@@ -87,6 +99,19 @@ export const toggleLikePost = asyncHandler(async (req: PostRequest, res: Respons
     if (!result?.updated) return sendError(res, "Post no encontrado", 404);
 
     const added = !result.alreadyHad;
+
+    if (added) {
+        const ownerId = getPostOwnerId(req.post);
+        if (ownerId) {
+            await createNotification({
+                type: "like",
+                to: ownerId,
+                from: req.user.id,
+                postId: req.params.id as string,
+            });
+        }
+    }
+
     return sendSuccess(res, {
         liked: added,
         likesCount: Math.max(0, result.updated.likesCount),
@@ -103,8 +128,20 @@ export const toggleBookmarkPost = asyncHandler(async (req: PostRequest, res: Res
     if (!result?.updated) return sendError(res, "Post no encontrado", 404);
 
     const added = !result.alreadyHad;
+
+    if (added) {
+        const ownerId = getPostOwnerId(req.post);
+        if (ownerId) {
+            await createNotification({
+                type: "bookmark",
+                to: ownerId,
+                from: req.user.id,
+                postId: req.params.id as string,
+            });
+        }
+    }
+
     return sendSuccess(res, {
-        bookmarked: added,
         bookmarksCount: Math.max(0, result.updated.bookmarksCount),
         userBookmarked: added,
     });

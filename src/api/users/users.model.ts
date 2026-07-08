@@ -54,6 +54,7 @@ const userSchema: Schema<UserType> = new Schema(
         },
         followers: { type: [{ type: Schema.Types.ObjectId, ref: "users" }], default: [] },
         following: { type: [{ type: Schema.Types.ObjectId, ref: "users" }], default: [] },
+        completedEpisodes: { type: [Number], default: [] },
         orders: { type: [{ type: Schema.Types.ObjectId }], default: [] },
         bookings: { type: [{ type: Schema.Types.ObjectId }], default: [] },
     },

@@ -635,92 +635,158 @@ npm start
 
 ## Estructura del código fuente
 
-Cada recurso bajo `src/api/` sigue el orden: **tipos** → **modelo Mongoose** → **controlador** → **rutas**.
+Cada recurso bajo `src/api/` sigue: **tipos** → **modelo** → **schemas (Zod)** → **controlador** → **rutas**.
 
 ```
 src/
-├── index.ts              # Express, CORS, rutas montadas
-├── config/
-│   └── db.ts             # Conexión y transformación global toJSON (id, sin __v)
+├── index.ts
+├── config/           # db, cloudinary
+├── data/             # catálogo de cartas y datos de serie (JSON read-only)
 └── api/
+    ├── auth/
     ├── users/
     ├── posts/
-    └── comments/
+    ├── comments/
+    ├── notifications/
+    ├── progress/
+    ├── cards/
+    └── serie/
 ```
 
-### `config/db.ts`
+### Convenciones
 
-Tras conectar, se aplica a todos los modelos una transformación al serializar a JSON:
-
-- `id` como string derivado de `_id`
-- se omiten `_id` y `__v`
-
-### Relaciones y `populate`
-
-Las referencias (`ref`) entre colecciones se resuelven con `.populate()` en los controladores, limitando campos cuando haga falta (por ejemplo `username` y `avatar` del autor) para no exponer contraseñas ni datos innecesarios.
-
-### Contraseña y email en usuario (buenas prácticas del proyecto)
-
-- `password` con `select: false` en consultas habituales.
-- `email` marcado como inmutable en el esquema para evitar cambios accidentales por `PUT` genérico.
-
-### Virtual `fullName` (usuario actual del repo)
-
-En el modelo de usuario implementado se expone un virtual que combina `name` y `surname` (con fallback a `username`), activo en `toJSON` / `toObject` con `virtuals: true`. La especificación amplia de `database.md` usa `firstName` / `lastName`; al migrar el esquema habrá que alinear nombres de campo y virtual.
+- Respuestas con envelope: `{ status, message, data }` (errores: `{ status, message, code }`).
+- JWT Bearer en rutas protegidas; `optionalAuth` en lecturas que enriquecen flags (`userLiked`, etc.).
+- IDs en JSON como `id` string (transform global en `config/db.ts`).
+- Validación con Zod antes de llegar al controlador.
+- Referencia funcional alineada con el monorepo LogPose (`MASTER-PROGRAMACION/logpose`).
 
 ---
 
-## Endpoints implementados actualmente en este repositorio
+## Endpoints implementados
 
-La especificación anterior describe el **objetivo** de LogPose v3. En el código **de momento** existen sobre todo CRUD y lecturas al estilo “recurso + relaciones”, sin auth JWT ni likes/bookmarks en post tal como en la spec.
+Base URL: `http://localhost:3000/api`
 
-| Área | Estado |
-|------|--------|
-| `/api/auth/*` | No implementado |
-| `/api/users` CRUD básico | Implementado (`GET`, `GET/:id`, `POST`, `PUT/:id`, `DELETE/:id`) |
-| `/api/users/:id/posts`, stats, privacy, liked/bookmarked/commented-posts | No implementado (figuran solo en la spec anterior) |
-| `/api/posts` listado público, por usuario, mis posts, share, CRUD | Implementado |
-| Likes, bookmarks, `POST .../comments` bajo el post | No implementado; comentarios vía `/api/comments` |
-| `/api/comments` por `postId`, crear, borrar con hilo | Implementado |
-| Progreso serie, cards, notificaciones, rankings | No implementado (solo descritos arriba como producto) |
+### Health
 
-### Rutas montadas hoy
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/api` | No |
 
-| Método | Ruta |
-|--------|------|
-| GET | `/` |
-| GET | `/api/users` |
-| GET | `/api/users/:id` |
-| POST | `/api/users` |
-| PUT | `/api/users/:id` |
-| DELETE | `/api/users/:id` |
-| GET | `/api/posts` |
-| GET | `/api/posts/user/:userId` |
-| GET | `/api/posts/my-posts/:userId` |
-| GET | `/api/posts/share/:shareToken` |
-| GET | `/api/posts/:id` |
-| POST | `/api/posts` |
-| PUT | `/api/posts/:id` |
-| DELETE | `/api/posts/:id` |
-| GET | `/api/comments/post/:postId` |
-| POST | `/api/comments` |
-| DELETE | `/api/comments/:id` |
+### Auth — `/api/auth`
 
-**Comentarios:** el body de `POST /api/comments` debe incluir `postId`, `author` y `text` (y opcionalmente `parentComment`). Cuando exista auth, `author` podrá inferirse del token.
+| Método | Ruta | Auth |
+|--------|------|------|
+| POST | `/register` | No |
+| POST | `/login` | No |
+| GET | `/me` | Sí |
+| PATCH | `/change-password` | Sí |
+| POST | `/logout` | Sí |
 
-**Cascadas actuales:** borrar un post elimina comentarios con ese `postId`; borrar un usuario elimina sus posts y comentarios relacionados según la lógica del controlador.
+### Users — `/api/users`
+
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/` | Admin |
+| GET | `/ranking` | Sí |
+| GET | `/:id` | No |
+| PATCH | `/:id` | Sí (propio/admin) |
+| DELETE | `/:id` | Sí (propio/admin) |
+| PATCH | `/:id/avatar` | Sí (multipart) |
+| GET | `/:id/stats` | No |
+| GET | `/:id/followers` | No |
+| GET | `/:id/following` | No |
+| GET | `/:id/posts` | Opcional |
+| GET | `/:id/liked-posts` | Opcional |
+| GET | `/:id/bookmarked-posts` | Opcional |
+| GET | `/:id/commented-posts` | Opcional |
+| POST | `/:id/follow` | Sí |
+| POST | `/:id/unfollow` | Sí |
+
+Rutas con privacidad: 403 si `privacy.show*` es `false` (excepto dueño/admin).
+
+### Posts — `/api/posts`
+
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/` | Opcional |
+| GET | `/share/:shareToken` | Opcional |
+| GET | `/:id` | Opcional |
+| POST | `/` | Sí (JSON o multipart: `images`, `pdf`) |
+| PATCH | `/:id` | Sí (autor) |
+| DELETE | `/:id` | Sí (autor, soft delete) |
+| POST | `/:id/like` | Sí |
+| POST | `/:id/bookmark` | Sí |
+| PATCH | `/:id/pdf` | Sí (multipart) |
+
+### Comments — `/api/comments`
+
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/post/:postId` | Opcional |
+| POST | `/` | Sí |
+| DELETE | `/:id` | Sí (autor) |
+| POST | `/:id/like` | Sí |
+
+### Notifications — `/api/notifications`
+
+Generadas en servidor (like, bookmark, comment, follow). Sin `POST` desde cliente.
+
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/` | Sí |
+| GET | `/unread-count` | Sí |
+| PUT | `/:id/read` | Sí |
+| PUT | `/mark-all-read` | Sí |
+| DELETE | `/:id` | Sí |
+| DELETE | `/` | Sí |
+
+### Progress — `/api/progress`
+
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/me` | Sí |
+| PATCH | `/me` | Sí |
+| DELETE | `/me` | Sí |
+| POST | `/me/episodes/:episodeId/complete` | Sí |
+
+### Cards — `/api/cards`
+
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/catalog` | No |
+| GET | `/catalog/:type` | No |
+| GET | `/me` | Sí |
+| GET | `/me/:type` | Sí |
+| GET | `/users/:userId` | Sí |
+
+### Serie — `/api/serie`
+
+| Método | Ruta | Auth |
+|--------|------|------|
+| GET | `/sagas` | No |
+| GET | `/sagas/:sagaId/arcs` | No |
+| GET | `/arcs/:arcId/episodes` | No |
+| GET | `/episodes/:episodeId` | No |
+
+### Pendiente / fuera de alcance
+
+- Retweets, búsqueda de posts, feed `followers|private` avanzado.
+- Cards v2 (`/cards/v2/*`).
+- Rutas legacy del Postman: `products`, `carts`, `orders`, `users/me/*`, `GET /users/username/:username`.
 
 ---
 
-## Flujos recomendados (hasta completar la spec)
+## Variables de entorno
 
-1. Crear usuario: `POST /api/users` con los campos del modelo actual del repo.
-2. Crear post: `POST /api/posts` con `userId`, `text`, opcional `images` y `visibility`.
-3. Listar feed público: `GET /api/posts`.
-4. Comentar: `POST /api/comments` con `postId`, `author`, `text`.
-5. Listar comentarios: `GET /api/comments/post/:postId`.
-
-Cuando `/api/auth` y el resto de rutas de `database.md` estén implementadas, este apartado se sustituirá por flujos basados en JWT y en las rutas de usuario ampliadas.
+```env
+PORT=3000
+MONGO_URI=mongodb+srv://...
+JWT_SECRET=tu-secreto
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+```
 
 ---
 
@@ -729,8 +795,9 @@ Cuando `/api/auth` y el resto de rutas de `database.md` estén implementadas, es
 | Comando | Descripción |
 |---------|-------------|
 | `npm run dev` | Vigila `src`, compila y ejecuta |
-| `npm run build` | Genera `dist/` |
+| `npm run build` | Genera `dist/` y copia `src/data` |
 | `npm start` | Ejecuta `node dist/index.js` |
+| `npm run seed` | Usuarios + posts de prueba |
 
 ---
 

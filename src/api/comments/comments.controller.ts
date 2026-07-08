@@ -13,6 +13,7 @@ import {
     serializeComments,
     syncPostCommentsCount,
 } from "./comments.helpers.js";
+import { createNotification } from "../notifications/notifications.model.js";
 
 const getViewerId = (req: CommentRequest): string | undefined => req.user?.id;
 
@@ -37,6 +38,18 @@ export const createComment = asyncHandler(async (req: CommentRequest, res: Respo
     }
 
     const populated = await Comment.findById(newComment._id).populate(COMMENT_AUTHOR_POPULATE);
+
+    const postOwnerId = req.post?.userId?.toString();
+    if (postOwnerId) {
+        await createNotification({
+            type: "comment",
+            to: postOwnerId,
+            from: req.user.id,
+            postId: payload.postId,
+            commentId: newComment._id.toString(),
+        });
+    }
+
     return sendSuccess(res, serializeComment(populated!), "Comment created", 201);
 });
 

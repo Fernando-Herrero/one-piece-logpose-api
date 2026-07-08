@@ -46,6 +46,7 @@ export type UserType = {
     privacy: PrivacySettings;
     followers: Types.ObjectId[];
     following: Types.ObjectId[];
+    completedEpisodes: number[];
     orders?: Types.ObjectId[];
     bookings?: Types.ObjectId[];
     fullName?: string;

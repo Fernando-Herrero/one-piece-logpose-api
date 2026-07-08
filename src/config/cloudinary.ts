@@ -45,5 +45,24 @@ export const deleteFromCloudinary = async (url?: string) => {
     }
 };
 
+const createPostMediaUploader = () =>
+    multer({
+        storage: new CloudinaryStorage({
+            cloudinary,
+            params: async (_req, file) =>
+                ({
+                    folder: file.mimetype === "application/pdf" ? "onepiece/pdfs" : "onepiece/posts",
+                }) as { folder: string },
+        }),
+        fileFilter: (_req, file, callback) => {
+            if (file.mimetype === "application/pdf" || file.mimetype.startsWith("image/")) {
+                return callback(null, true);
+            }
+            callback(new Error("Solo se permiten imágenes o archivos PDF"));
+        },
+        limits: { fileSize: 10 * 1024 * 1024 },
+    });
+
 export const uploadAvatar = createImageUploader("onepiece/avatars");
 export const uploadPdf = createPdfUploader("onepiece/pdfs");
+export const uploadPostMedia = createPostMediaUploader();

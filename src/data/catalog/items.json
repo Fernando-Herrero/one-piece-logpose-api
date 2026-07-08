@@ -1,0 +1,214 @@
+[
+  {
+    "id": 1,
+    "name": "Straw Hat",
+    "type": "legendary",
+    "owner": "Monkey D. Luffy",
+    "origin": "Given by Shanks",
+    "image": "/cards/straw-hat.webp"
+  },
+  {
+    "id": 2,
+    "name": "Buggy Ball",
+    "type": "rare",
+    "owner": "Buggy",
+    "origin": "Buggy's signature weapon",
+    "image": "/cards/buggy-ball.webp"
+  },
+  {
+    "id": 3,
+    "name": "Buggy's cannon",
+    "type": "common",
+    "owner": "Buggy",
+    "origin": "Ship armament"
+  },
+  {
+    "id": 4,
+    "name": "Acrobatic unicycle",
+    "type": "common",
+    "owner": "Cabaji",
+    "origin": "Combat equipment"
+  },
+  {
+    "id": 5,
+    "name": "Slingshot",
+    "type": "rare",
+    "owner": "Usopp",
+    "origin": "Usopp's main weapon"
+  },
+  {
+    "id": 6,
+    "name": "Usopp's bag of tricks",
+    "type": "uncommon",
+    "owner": "Usopp",
+    "origin": "Various ammunition"
+  },
+  {
+    "id": 7,
+    "name": "Hypnosis rings",
+    "type": "uncommon",
+    "owner": "Jango",
+    "origin": "Hypnosis tool"
+  },
+  {
+    "id": 8,
+    "name": "Jango's chakram",
+    "type": "common",
+    "owner": "Jango",
+    "origin": "Throwing weapon"
+  },
+  {
+    "id": 9,
+    "name": "Cat Claws",
+    "type": "rare",
+    "owner": "Kuro",
+    "origin": "Kuro's signature weapons"
+  },
+  {
+    "id": 10,
+    "name": "Tonfa weapons",
+    "type": "common",
+    "owner": "Gin",
+    "origin": "Gin's combat weapons"
+  },
+  {
+    "id": 11,
+    "name": "Wootz Steel armor",
+    "type": "rare",
+    "owner": "Don Krieg",
+    "origin": "Krieg's heavy armor"
+  },
+  {
+    "id": 12,
+    "name": "MH5 gas",
+    "type": "rare",
+    "owner": "Don Krieg",
+    "origin": "Poison gas weapon"
+  },
+  {
+    "id": 13,
+    "name": "Wado Ichimonji",
+    "type": "legendary",
+    "owner": "Roronoa Zoro",
+    "origin": "Kuina's sword"
+  },
+  {
+    "id": 14,
+    "name": "Sandai Kitetsu",
+    "type": "rare",
+    "owner": "Roronoa Zoro",
+    "origin": "Cursed sword from Logue Town"
+  },
+  {
+    "id": 15,
+    "name": "Yubashiri",
+    "type": "rare",
+    "owner": "Roronoa Zoro",
+    "origin": "Gift from Ipponmatsu"
+  },
+  {
+    "id": 16,
+    "name": "Shigure",
+    "type": "uncommon",
+    "owner": "Tashigi",
+    "origin": "Tashigi's katana"
+  },
+  {
+    "id": 17,
+    "name": "Yoru",
+    "type": "legendary",
+    "owner": "Dracule Mihawk",
+    "origin": "World's strongest sword"
+  },
+  {
+    "id": 18,
+    "name": "Battle Spear",
+    "type": "rare",
+    "owner": "Don Krieg",
+    "origin": "Krieg's main weapon"
+  },
+  {
+    "id": 19,
+    "name": "Daisenso",
+    "type": "rare",
+    "owner": "Don Krieg",
+    "origin": "Krieg's explosive spear"
+  },
+  {
+    "id": 20,
+    "name": "Jitte",
+    "type": "uncommon",
+    "owner": "Smoker",
+    "origin": "Seastone-tipped weapon"
+  },
+  {
+    "id": 21,
+    "name": "Kiribachi",
+    "type": "rare",
+    "owner": "Arlong",
+    "origin": "Arlong's saw-sword"
+  },
+  {
+    "id": 22,
+    "name": "Six swords",
+    "type": "uncommon",
+    "owner": "Hatchan",
+    "origin": "Hatchan's octopus swordsmanship"
+  },
+  {
+    "id": 23,
+    "name": "Tabasco Star",
+    "type": "common",
+    "owner": "Usopp",
+    "origin": "Spicy ammunition"
+  },
+  {
+    "id": 24,
+    "name": "Mikan trees",
+    "type": "rare",
+    "owner": "Nami",
+    "origin": "Bell-mère's tangerine trees on Going Merry"
+  },
+  {
+    "id": 25,
+    "name": "Luffy's wanted poster",
+    "type": "legendary",
+    "owner": "World Government",
+    "origin": "30,000,000 berry bounty"
+  },
+  {
+    "id": 26,
+    "name": "Clima-Tact",
+    "type": "rare",
+    "owner": "Nami",
+    "origin": "Nami's weather weapon (basic version)"
+  },
+  {
+    "id": 27,
+    "name": "Elephant Tuna",
+    "type": "uncommon",
+    "owner": "Carmen",
+    "origin": "Rare cooking ingredient"
+  },
+  {
+    "id": 28,
+    "name": "Dragonite",
+    "type": "legendary",
+    "owner": "Lost Island",
+    "origin": "Millennium Dragon nest material"
+  },
+  {
+    "id": 29,
+    "name": "Execution platform",
+    "type": "legendary",
+    "owner": "Logue Town",
+    "origin": "Where Gol D. Roger died"
+  },
+  {
+    "id": 30,
+    "name": "Wind scythes",
+    "type": "uncommon",
+    "owner": "Eric",
+    "origin": "Eric's wind-cutting attacks"
+  }
+]

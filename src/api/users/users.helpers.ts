@@ -17,3 +17,7 @@ export async function findUserById(id: string) {
 export function isPrivacyDenied(user: { privacy?: PrivacySettings }, key: PrivacyKey): boolean {
     return user.privacy?.[key] === false;
 }
+
+export function serializeUserSummary(user: { toJSON: () => Record<string, unknown> }) {
+    return user.toJSON();
+}

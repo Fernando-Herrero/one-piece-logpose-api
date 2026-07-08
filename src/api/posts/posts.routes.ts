@@ -10,7 +10,7 @@ import {
 import { createPostSchema, postIdParamSchema, shareTokenParamSchema, updatePostSchema } from "./posts.schemas.js";
 import { validate } from "../../middlewares/validate.middleware.js";
 import { checkAuth, optionalAuth } from "../auth/auth.middleware.js";
-import { uploadPdf } from "../../config/cloudinary.js";
+import { uploadPdf, uploadPostMedia } from "../../config/cloudinary.js";
 
 export const postRoutes: Router = Router();
 
@@ -31,7 +31,15 @@ postRoutes.get("/:id", [optionalAuth, withPostId, loadPost], postsController.get
 
 postRoutes.post(
     "/",
-    [checkAuth, uploadPdf.single("pdf"), withCreatePost, validateCreatePostAuthor],
+    [
+        checkAuth,
+        uploadPostMedia.fields([
+            { name: "images", maxCount: 4 },
+            { name: "pdf", maxCount: 1 },
+        ]),
+        withCreatePost,
+        validateCreatePostAuthor,
+    ],
     postsController.createPost
 );
 

@@ -3,6 +3,13 @@ import mongoose, { Types } from "mongoose";
 import type { UserType } from "../users/users.types.js";
 import { AuthPayload } from "../auth/auth.types.js";
 
+export type MulterFile = NonNullable<Request["file"]>;
+
+export type PostMediaFiles = {
+    images?: MulterFile[];
+    pdf?: MulterFile[];
+};
+
 export type PostType = {
     _id: Types.ObjectId;
     text: string;
@@ -35,4 +42,9 @@ export type PostRequest = Request & {
     post?: PostDoc;
     postAuthor?: PostAuthorDoc;
     user?: AuthPayload;
+};
+
+/** Request de creación con archivos opcionales (images, pdf) vía uploadPostMedia.fields(). */
+export type CreatePostRequest = PostRequest & {
+    files?: PostMediaFiles;
 };

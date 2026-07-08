@@ -1,0 +1,1097 @@
+[
+  {
+    "id": 1,
+    "name": "Monkey D. Luffy",
+    "type": [
+      "common",
+      "uncommon",
+      "rare",
+      "legendary"
+    ],
+    "abilities": [
+      "Gomu Gomu no Pistol",
+      "Gomu Gomu no Gatling",
+      "Gomu Gomu no Bazooka",
+      "Gomu Gomu no Storm",
+      "Gomu Gomu no Red Hawk",
+      "Gomu Gomu no King Kong Gun",
+      "Gear Second",
+      "Gear Third",
+      "Gear Fourth",
+      "Gear Fifth"
+    ],
+    "bounty": [
+      0,
+      30000000,
+      100000000,
+      150000000,
+      400000000,
+      500000000,
+      1500000000,
+      3000000000
+    ],
+    "fruit": "Gomu Gomu no Mi",
+    "crew": "Straw Hat Pirates",
+    "position": "Captain",
+    "image": "/cards/luffy.webp"
+  },
+  {
+    "id": 2,
+    "name": "Alvida",
+    "type": [
+      "common",
+      "uncommon"
+    ],
+    "abilities": [
+      "Club fighting",
+      "Sube Sube no Mi"
+    ],
+    "bounty": [
+      5000000
+    ],
+    "fruit": "Sube Sube no Mi",
+    "crew": "Alvida Pirates",
+    "position": "Captain",
+    "image": "/cards/alvida.webp"
+  },
+  {
+    "id": 3,
+    "name": "Koby",
+    "type": [
+      "common",
+      "uncommon",
+      "rare"
+    ],
+    "abilities": [
+      "Basic combat skills",
+      "Rokushiki (Soru, Tekkai, Geppou, Shigan, Rankyaku)"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines",
+    "position": "Marine",
+    "image": "/cards/koby.webp"
+  },
+  {
+    "id": 4,
+    "name": "Roronoa Zoro",
+    "type": [
+      "common",
+      "uncommon",
+      "rare",
+      "legendary"
+    ],
+    "abilities": [
+      "Santoryu Ogi: Sanzen Sekai",
+      "Santoryu Ogi: Rokudo no Tsuji",
+      "Asura",
+      "Haki"
+    ],
+    "bounty": [
+      0,
+      60000000,
+      120000000,
+      320000000
+    ],
+    "fruit": null,
+    "crew": "Straw Hat Pirates",
+    "position": "Swordsman/First Mate",
+    "image": "/cards/zoro.webp"
+  },
+  {
+    "id": 5,
+    "name": "Captain Morgan",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Axe Hand",
+      "Marine combat"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines",
+    "position": "Captain",
+    "image": "/cards/captain-morgan.webp"
+  },
+  {
+    "id": 6,
+    "name": "Helmeppo",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Swordsmanship (later)",
+      "Cowardly tactics"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines",
+    "position": "Marine",
+    "image": "/cards/helmeppo.webp"
+  },
+  {
+    "id": 7,
+    "name": "Nami",
+    "type": [
+      "common",
+      "uncommon",
+      "rare",
+      "legendary"
+    ],
+    "abilities": [
+      "Climatact",
+      "Weather manipulation",
+      "Navigation skills",
+      "Thievery"
+    ],
+    "bounty": [
+      0,
+      16000000,
+      66000000,
+      366000000
+    ],
+    "fruit": null,
+    "crew": "Straw Hat Pirates",
+    "position": "Navigator",
+    "image": "/cards/nami.webp"
+  },
+  {
+    "id": 8,
+    "name": "Shanks",
+    "type": [
+      "legendary"
+    ],
+    "abilities": [
+      "Haki",
+      "Swordsmanship"
+    ],
+    "bounty": [
+      4048900000
+    ],
+    "fruit": null,
+    "crew": "Red Hair Pirates",
+    "position": "Captain/Yonko",
+    "image": "/cards/shanks.webp"
+  },
+  {
+    "id": 9,
+    "name": "Buggy",
+    "type": [
+      "common",
+      "uncommon",
+      "rare",
+      "legendary"
+    ],
+    "abilities": [
+      "Bara Bara no Mi",
+      "Swordsmanship",
+      "Explosives",
+      "Buggy Ball"
+    ],
+    "bounty": [
+      15000000,
+      15000000,
+      3189000000
+    ],
+    "fruit": "Bara Bara no Mi",
+    "crew": "Buggy Pirates",
+    "position": "Captain",
+    "image": "/cards/buggy.webp"
+  },
+  {
+    "id": 10,
+    "name": "Mohji",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Beast Taming",
+      "Whip fighting"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Buggy Pirates",
+    "position": "Chief of Staff",
+    "image": "/cards/mohji.webp"
+  },
+  {
+    "id": 11,
+    "name": "Richie",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Lion strength",
+      "Claws and fangs"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Buggy Pirates",
+    "position": "Beast",
+    "image": "/cards/richie.webp"
+  },
+  {
+    "id": 12,
+    "name": "Cabaji",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Acrobatics",
+      "Sword combat",
+      "Unicycle fighting"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Buggy Pirates",
+    "position": "Chief of Staff",
+    "image": "/cards/cabaji.webp"
+  },
+  {
+    "id": 13,
+    "name": "Chouchou",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Loyalty",
+      "Guard dog instincts"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Pet store guardian",
+    "image": "/cards/chouchou.webp"
+  },
+  {
+    "id": 14,
+    "name": "Boodle",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Leadership",
+      "Town management"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Orange Town",
+    "position": "Mayor"
+  },
+  {
+    "id": 15,
+    "name": "Usopp",
+    "type": [
+      "common",
+      "uncommon",
+      "rare",
+      "legendary"
+    ],
+    "abilities": [
+      "Sniping",
+      "Trick weapons",
+      "Haki",
+      "Engineering",
+      "Pop Green"
+    ],
+    "bounty": [
+      0,
+      30000000,
+      200000000,
+      500000000
+    ],
+    "fruit": null,
+    "crew": "Straw Hat Pirates",
+    "position": "Sniper"
+  },
+  {
+    "id": 16,
+    "name": "Kaya",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Medical knowledge",
+      "Wealth management"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Wealthy heiress"
+  },
+  {
+    "id": 17,
+    "name": "Merry",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Ship design",
+      "Craftsmanship"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Shipwright"
+  },
+  {
+    "id": 18,
+    "name": "Onion",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Basic slingshot",
+      "Childish tactics"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Usopp Pirates",
+    "position": "Member"
+  },
+  {
+    "id": 19,
+    "name": "Pepper",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Basic slingshot",
+      "Childish tactics"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Usopp Pirates",
+    "position": "Member"
+  },
+  {
+    "id": 20,
+    "name": "Carrot",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Basic slingshot",
+      "Childish tactics"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Usopp Pirates",
+    "position": "Member"
+  },
+  {
+    "id": 21,
+    "name": "Jango",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Hypnosis",
+      "Chakram throwing",
+      "Dancing"
+    ],
+    "bounty": [
+      9000000
+    ],
+    "fruit": null,
+    "crew": "Black Cat Pirates",
+    "position": "First Mate"
+  },
+  {
+    "id": 22,
+    "name": "Kuro",
+    "type": [
+      "common",
+      "uncommon"
+    ],
+    "abilities": [
+      "Stealth",
+      "Strategy",
+      "Cat Claws",
+      "Shakushi (Silent Step)",
+      "Out of the Bag Attack"
+    ],
+    "bounty": [
+      16000000
+    ],
+    "fruit": null,
+    "crew": "Black Cat Pirates",
+    "position": "Captain"
+  },
+  {
+    "id": 23,
+    "name": "Sham",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Agility",
+      "Cat-like reflexes",
+      "Team fighting with Buchi"
+    ],
+    "bounty": [
+      7300000
+    ],
+    "fruit": null,
+    "crew": "Black Cat Pirates",
+    "position": "Nyaban Brothers"
+  },
+  {
+    "id": 24,
+    "name": "Buchi",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Strength",
+      "Cat-like reflexes",
+      "Team fighting with Sham"
+    ],
+    "bounty": [
+      7300000
+    ],
+    "fruit": null,
+    "crew": "Black Cat Pirates",
+    "position": "Nyaban Brothers"
+  },
+  {
+    "id": 25,
+    "name": "Kuina",
+    "type": [
+      "uncommon",
+      "rare"
+    ],
+    "abilities": [
+      "Expert swordsmanship",
+      "Wado Ichimonji"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Dojo student (deceased)"
+  },
+  {
+    "id": 26,
+    "name": "Koshiro",
+    "type": [
+      "rare"
+    ],
+    "abilities": [
+      "Master swordsmanship",
+      "Teaching",
+      "Calm demeanor"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Dojo master"
+  },
+  {
+    "id": 27,
+    "name": "Johnny",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Basic swordsmanship",
+      "Bounty hunting"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Bounty hunter"
+  },
+  {
+    "id": 28,
+    "name": "Yosaku",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Basic swordsmanship",
+      "Bounty hunting"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Bounty hunter"
+  },
+  {
+    "id": 29,
+    "name": "Sanji",
+    "type": [
+      "common",
+      "uncommon",
+      "rare",
+      "legendary"
+    ],
+    "abilities": [
+      "Black Leg Style",
+      "Diable Jambe",
+      "Sky Walk",
+      "Haki",
+      "Cooking mastery"
+    ],
+    "bounty": [
+      0,
+      77000000,
+      177000000,
+      330000000,
+      1032000000
+    ],
+    "fruit": null,
+    "crew": "Straw Hat Pirates",
+    "position": "Cook"
+  },
+  {
+    "id": 30,
+    "name": "Zeff",
+    "type": [
+      "rare"
+    ],
+    "abilities": [
+      "Red Leg fighting style",
+      "Cooking mastery",
+      "Leadership",
+      "Survival skills"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Baratie",
+    "position": "Head chef/Owner"
+  },
+  {
+    "id": 31,
+    "name": "Patty",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Cooking",
+      "Basic combat"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Baratie",
+    "position": "Cook/Fighter"
+  },
+  {
+    "id": 32,
+    "name": "Carne",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Cooking",
+      "Basic combat"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Baratie",
+    "position": "Cook/Fighter"
+  },
+  {
+    "id": 33,
+    "name": "Fullbody",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Marine combat",
+      "Iron knuckles"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines",
+    "position": "Lieutenant"
+  },
+  {
+    "id": 34,
+    "name": "Gin",
+    "type": [
+      "uncommon"
+    ],
+    "abilities": [
+      "Tonfa combat",
+      "Battle experience",
+      "Loyalty"
+    ],
+    "bounty": [
+      12000000
+    ],
+    "fruit": null,
+    "crew": "Krieg Pirates",
+    "position": "Combat Commander"
+  },
+  {
+    "id": 35,
+    "name": "Don Krieg",
+    "type": [
+      "rare"
+    ],
+    "abilities": [
+      "Heavy armor",
+      "Various weapons",
+      "Battle Spear",
+      "MH5 gas",
+      "Leadership"
+    ],
+    "bounty": [
+      17000000
+    ],
+    "fruit": null,
+    "crew": "Krieg Pirates",
+    "position": "Admiral/Captain"
+  },
+  {
+    "id": 36,
+    "name": "Pearl",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Shield defense",
+      "Fire resistance",
+      "Iron wall combat"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Krieg Pirates",
+    "position": "Second Combat Commander"
+  },
+  {
+    "id": 37,
+    "name": "Dracule Mihawk",
+    "type": [
+      "legendary"
+    ],
+    "abilities": [
+      "World's Strongest Swordsman",
+      "Yoru",
+      "Haki",
+      "Cross slash"
+    ],
+    "bounty": [
+      3590000000
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Shichibukai/World's Greatest Swordsman"
+  },
+  {
+    "id": 38,
+    "name": "Higuma",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Mountain bandit tactics",
+      "Basic combat"
+    ],
+    "bounty": [
+      8000000
+    ],
+    "fruit": null,
+    "crew": "Higuma Bandits",
+    "position": "Bandit leader"
+  },
+  {
+    "id": 39,
+    "name": "Arlong",
+    "type": [
+      "rare"
+    ],
+    "abilities": [
+      "Fishman strength",
+      "Shark teeth",
+      "Water combat",
+      "Kiribachi"
+    ],
+    "bounty": [
+      20000000
+    ],
+    "fruit": null,
+    "crew": "Arlong Pirates",
+    "position": "Captain"
+  },
+  {
+    "id": 40,
+    "name": "Bell-mère",
+    "type": [
+      "uncommon"
+    ],
+    "abilities": [
+      "Marine combat",
+      "Navigation",
+      "Tangerine farming"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines (former)",
+    "position": "Marine (former)/Foster mother"
+  },
+  {
+    "id": 41,
+    "name": "Nojiko",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Tangerine farming",
+      "Village knowledge"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Villager/Nami's sister"
+  },
+  {
+    "id": 42,
+    "name": "Genzo",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Village leadership",
+      "Basic combat"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Sheriff/Village leader"
+  },
+  {
+    "id": 43,
+    "name": "Kuroobi",
+    "type": [
+      "uncommon"
+    ],
+    "abilities": [
+      "Fishman Karate",
+      "Water combat",
+      "Ray-fin strikes"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Arlong Pirates",
+    "position": "Officer"
+  },
+  {
+    "id": 44,
+    "name": "Chu",
+    "type": [
+      "uncommon"
+    ],
+    "abilities": [
+      "Water bullets",
+      "Fishman physiology",
+      "Marksmanship"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Arlong Pirates",
+    "position": "Officer"
+  },
+  {
+    "id": 45,
+    "name": "Hatchan",
+    "type": [
+      "uncommon"
+    ],
+    "abilities": [
+      "Six-sword style",
+      "Octopus ink",
+      "Takoyaki cooking"
+    ],
+    "bounty": [
+      8000000
+    ],
+    "fruit": null,
+    "crew": "Arlong Pirates",
+    "position": "Officer"
+  },
+  {
+    "id": 46,
+    "name": "Nezumi",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Marine authority",
+      "Corruption",
+      "Cowardice"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines",
+    "position": "Captain (corrupt)"
+  },
+  {
+    "id": 47,
+    "name": "Smoker",
+    "type": [
+      "rare",
+      "legendary"
+    ],
+    "abilities": [
+      "Moku Moku no Mi",
+      "Jitte",
+      "Haki",
+      "Marine combat"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": "Moku Moku no Mi",
+    "crew": "Marines",
+    "position": "Captain (later Admiral)"
+  },
+  {
+    "id": 48,
+    "name": "Tashigi",
+    "type": [
+      "uncommon",
+      "rare"
+    ],
+    "abilities": [
+      "Swordsmanship",
+      "Shigure",
+      "Marine training"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines",
+    "position": "Sergeant Major"
+  },
+  {
+    "id": 49,
+    "name": "Ipponmatsu",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Sword knowledge",
+      "Weapon appraisal",
+      "Shop management"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Weapon shop owner"
+  },
+  {
+    "id": 50,
+    "name": "Daddy Masterson",
+    "type": [
+      "uncommon"
+    ],
+    "abilities": [
+      "Expert marksmanship",
+      "Quick draw",
+      "Rifle mastery"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Sheriff/Former bounty hunter"
+  },
+  {
+    "id": 51,
+    "name": "Carol",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "None specified"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Daddy's daughter"
+  },
+  {
+    "id": 52,
+    "name": "Carmen",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Expert cooking",
+      "Competition skills"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Chef"
+  },
+  {
+    "id": 53,
+    "name": "Dragon",
+    "type": [
+      "legendary"
+    ],
+    "abilities": [
+      "Revolutionary leadership",
+      "Weather control",
+      "Haki"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Revolutionary Army",
+    "position": "Leader"
+  },
+  {
+    "id": 54,
+    "name": "Apis",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Hiso Hiso no Mi (animal communication)"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": "Hiso Hiso no Mi",
+    "crew": "Independent",
+    "position": "Girl from Warship Island"
+  },
+  {
+    "id": 55,
+    "name": "Eric",
+    "type": [
+      "uncommon"
+    ],
+    "abilities": [
+      "Kama Kama no Mi (sickle-sickle fruit)",
+      "Wind scythes"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": "Kama Kama no Mi",
+    "crew": "Independent",
+    "position": "Mercenary"
+  },
+  {
+    "id": 56,
+    "name": "Ryuji",
+    "type": [
+      "rare"
+    ],
+    "abilities": [
+      "Ancient dragon wisdom",
+      "Flight",
+      "Longevity"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Sennenryu (Thousand-Year Dragon)"
+  },
+  {
+    "id": 57,
+    "name": "Bokuden",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Village leadership",
+      "Dragon knowledge"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Independent",
+    "position": "Village elder"
+  },
+  {
+    "id": 58,
+    "name": "Nelson Royale",
+    "type": [
+      "common"
+    ],
+    "abilities": [
+      "Marine command",
+      "Naval tactics"
+    ],
+    "bounty": [
+      0
+    ],
+    "fruit": null,
+    "crew": "Marines",
+    "position": "Admiral"
+  }
+]

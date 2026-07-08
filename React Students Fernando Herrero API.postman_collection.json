@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "eeaaef24-1bea-42bb-9156-5a95abae0c53",
     "name": "React Students Fernando Herrero API",
-    "description": "Guía de la API LogPose (One Piece).\n\n**Auth JWT:** register/login → Bearer {{authToken}}. Respuestas: `{ status, message, data }`.\n\nVariables: baseUrl, authToken, userId, postId, commentId, …\n\nFlujo: Auth → Posts → Comments → Users.\n\n**Reglas auth actuales:**\n- Posts/comments mutaciones: JWT (sin userId/author en body)\n- GET posts/comments: Bearer opcional (userLiked flags)\n- PATCH/DELETE users/:id: solo perfil propio\n- Registro: POST /auth/register (no POST /users)\n\nRequests sin ruta en backend → 404 (follow, search, notifications, etc.).",
+    "description": "Guía de la API LogPose (One Piece) — alineada con el monorepo logpose.\n\n**Contrato:** envelope `{ status, message, data }`, JWT Bearer, registro vía `/auth/register`.\n\n**Implementado:** auth, users (follow, ranking, privacidad), posts (multipart), comments, notifications, progress, cards v1, serie.\n\n**Legacy / 404:** products, carts, orders, users/me/*, username lookup, PATCH comments, posts search/retweet.\n\nVariables: baseUrl, authToken, userId, postId, commentId.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "48301766"
   },

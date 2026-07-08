@@ -14,7 +14,7 @@ const visibilitySchema = z.enum(["public", "private", "followers"]);
 
 const postFieldsSchema = z.object({
     text: z.string().trim().min(1, "El texto es obligatorio"),
-    images: z.array(z.string()).optional(),
+    images: z.array(z.string()).max(4, "Máximo 4 imágenes").optional(),
     visibility: visibilitySchema.optional(),
     isPinned: z.boolean().optional(),
 });

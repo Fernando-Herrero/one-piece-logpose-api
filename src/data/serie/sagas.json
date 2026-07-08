@@ -1,0 +1,153 @@
+[
+  {
+    "id": 1,
+    "name": "East Blue",
+    "titleJa": "イーストブルー編",
+    "totalEpisodes": 61,
+    "firstArc": 1,
+    "lastArc": 8,
+    "arcNames": [
+      "Romance Dawn Arc",
+      "Orange Town Arc",
+      "Syrup Village Arc",
+      "Baratie Arc",
+      "Arlong Park Arc",
+      "Buggy Side Story (Filler)",
+      "Loguetown Arc",
+      "Warship Island Arc (Filler)"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Alabasta",
+    "titleJa": "アラバスタ編",
+    "totalEpisodes": 74,
+    "firstArc": 9,
+    "lastArc": 15,
+    "arcNames": [
+      "Reverse Mountain Arc",
+      "Whisky Peak Arc",
+      "Koby and Helmeppo Arc (Filler)",
+      "Little Garden Arc",
+      "Drum Island Arc",
+      "Alabasta Arc",
+      "Post-Alabasta Arc"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Sky Island",
+    "titleJa": "空島編",
+    "totalEpisodes": 71,
+    "firstArc": 16,
+    "lastArc": 20,
+    "arcNames": [
+      "Goat Island Arc (Filler)",
+      "Ruluka Island Arc (Filler)",
+      "Jaya Arc",
+      "Skypiea Arc",
+      "G-8 Arc (Filler)"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Water 7",
+    "titleJa": "ウォーターセブン編",
+    "totalEpisodes": 119,
+    "firstArc": 21,
+    "lastArc": 26,
+    "arcNames": [
+      "Long Ring Long Land Arc",
+      "Ocean's Dream Arc (Filler)",
+      "Foxy's Return Arc (Filler)",
+      "Water 7 Arc",
+      "Enies Lobby Arc",
+      "Post-Enies Lobby Arc"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Thriller Bark Saga",
+    "titleJa": "スリラーバーク編",
+    "totalEpisodes": 45,
+    "firstArc": 27,
+    "lastArc": 29,
+    "arcNames": [
+      "Ice Hunter Arc (Filler)",
+      "Thriller Bark Arc",
+      "Spa Island Arc (Filler)"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Summit War Saga",
+    "titleJa": "頂上戦争編",
+    "totalEpisodes": 132,
+    "firstArc": 30,
+    "lastArc": 35,
+    "arcNames": [
+      "Sabaody Archipelago Arc",
+      "Amazon Lily Arc",
+      "Impel Down Arc",
+      "Little East Blue (Filler)",
+      "Marineford Arc",
+      "Post-War Arc"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Fishman Island",
+    "titleJa": "魚人島編",
+    "totalEpisodes": 58,
+    "firstArc": 36,
+    "lastArc": 37,
+    "arcNames": [
+      "Return to Sabaody Arc",
+      "Fishman Island Arc"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Dressrosa",
+    "titleJa": "ドレスローザ編",
+    "totalEpisodes": 118,
+    "firstArc": 38,
+    "lastArc": 41,
+    "arcNames": [
+      "Z's Ambition Arc",
+      "Punk Hazard Arc",
+      "Caesar Retrieval Arc",
+      "Dressrosa Arc"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Whole Cake Island",
+    "titleJa": "ホールケーキアイランド編",
+    "totalEpisodes": 143,
+    "firstArc": 42,
+    "lastArc": 46,
+    "arcNames": [
+      "Silver Mine (Filler)",
+      "Zou Arc",
+      "Marine Rookie Arc (Filler)",
+      "Whole Cake Island Arc",
+      "Levely Arc"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Wano Country",
+    "titleJa": "ワノ国編",
+    "totalEpisodes": 195,
+    "firstArc": 44,
+    "lastArc": 51,
+    "arcNames": [
+      "Wano Country Arc (Part 1)",
+      "Cidre Guild Arc (Filler)",
+      "Wano Country Arc (Part 2)",
+      "Uta's Past Arc (Filler)",
+      "Wano Country Arc (Part 3)"
+    ]
+  }
+]

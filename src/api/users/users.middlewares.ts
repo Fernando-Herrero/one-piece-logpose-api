@@ -26,7 +26,7 @@ export const assertPrivacy = (key: PrivacyKey) => {
         const isSelf = req.user?.id === req.params.id;
         const isAdmin = req.user?.role === "admin";
 
-        if (!isSelf && !isAdmin) return next();
+        if (isSelf || isAdmin) return next();
 
         if (isPrivacyDenied(user, key)) {
             return sendError(res, "This content is private", 403);

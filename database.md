@@ -83,14 +83,15 @@ La mayoría de endpoints usan el envelope definido en `src/utils/response.utils.
 
 | Fase | Módulo | Carpeta | Estado |
 |------|--------|---------|--------|
-| 1 | Infra (serializers, validación) | `src/utils/` | 🔜 Siguiente |
-| 1 | Progreso de serie | `src/api/progress/` | 📁 Carpeta creada |
-| 1 | Cartas | `src/api/cards/` | 📁 Carpeta creada |
-| 2 | Usuarios (PATCH, stats, follow) | `src/api/users/` | ⚠️ Parcial |
-| 2 | Posts (like, bookmark) | `src/api/posts/` | ⚠️ Parcial |
-| 2 | Comentarios (like) | `src/api/comments/` | ⚠️ Parcial |
-| 3 | Notificaciones | `src/api/notifications/` | 📁 Carpeta creada |
-| 4 | Autenticación | `src/api/auth/` | ⏸️ Pendiente (clase no dada) |
+| 1 | Infra (serializers, validación) | `src/utils/` | ✅ |
+| 1 | Serie (datos estáticos) | `src/api/serie/` | ✅ |
+| 1 | Cartas v1 | `src/api/cards/` | ✅ |
+| 2 | Usuarios (follow, stats, privacidad) | `src/api/users/` | ✅ |
+| 2 | Posts (like, bookmark, multipart) | `src/api/posts/` | ✅ |
+| 2 | Comentarios (like) | `src/api/comments/` | ✅ |
+| 3 | Notificaciones | `src/api/notifications/` | ✅ |
+| 3 | Progreso de serie | `src/api/progress/` | ✅ |
+| 4 | Autenticación | `src/api/auth/` | ✅ |
 
 ---
 
@@ -1492,61 +1493,64 @@ Ver colección pública de otro usuario (solo si el perfil lo permite — defini
 
 ---
 
-## 📋 Resumen de rutas (contrato frontend)
+## 📋 Resumen de rutas (estado actual — alineado con LogPose)
 
-| Método | Ruta | Estado en api-onepiece |
-|--------|------|------------------------|
-| POST | `/auth/register` | ❌ Pendiente |
-| POST | `/auth/login` | ❌ Pendiente |
-| POST | `/auth/logout` | ❌ Pendiente |
-| GET | `/auth/me` | ❌ Pendiente |
-| GET | `/users` | ✅ Básico |
-| GET | `/users/:id` | ✅ Básico |
-| POST | `/users` | ✅ Básico (sin auth) |
-| PUT | `/users/:id` | ✅ Básico (usar PATCH en spec) |
-| PATCH | `/users/:id` | ❌ Pendiente |
-| DELETE | `/users/:id` | ✅ Con cascada |
-| GET | `/users/me/stats` | ❌ Pendiente |
-| GET | `/users/me/my-posts` | ❌ Pendiente |
-| GET | `/users/me/liked-posts` | ❌ Pendiente |
-| GET | `/users/me/bookmarked-posts` | ❌ Pendiente |
-| GET | `/users/me/commented-posts` | ❌ Pendiente |
-| GET | `/users/:id/posts` | ⚠️ Parcial (`/posts/user/:userId`) |
-| GET | `/users/:id/liked-posts` | ❌ Pendiente |
-| GET | `/users/:id/bookmarked-posts` | ❌ Pendiente |
-| GET | `/users/:id/commented-posts` | ❌ Pendiente |
-| GET | `/users/:id/stats` | ❌ Pendiente |
-| GET | `/users/:id/followers` | ❌ Pendiente |
-| GET | `/users/:id/following` | ❌ Pendiente |
-| POST | `/users/:id/follow` | ❌ Pendiente |
-| POST | `/users/:id/unfollow` | ❌ Pendiente |
-| GET | `/posts` | ✅ Básico |
-| GET | `/posts/:id` | ✅ Básico |
-| POST | `/posts` | ✅ Básico |
-| PUT | `/posts/:id` | ✅ Básico |
-| DELETE | `/posts/:id` | ✅ Básico |
-| POST | `/posts/:id/like` | ❌ Pendiente |
-| POST | `/posts/:id/bookmark` | ❌ Pendiente |
-| GET | `/comments/post/:postId` | ✅ Básico |
-| POST | `/comments` | ✅ Básico |
-| DELETE | `/comments/:id` | ✅ Básico |
-| POST | `/comments/:id/like` | ❌ Pendiente |
-| POST | `/notifications` | 🚫 Deprecado (solo servidor) |
-| GET | `/notifications` | ❌ Pendiente |
-| GET | `/notifications/unread-count` | ❌ Pendiente |
-| PUT | `/notifications/:id/read` | ❌ Pendiente |
-| PUT | `/notifications/mark-all-read` | ❌ Pendiente |
-| DELETE | `/notifications/:id` | ❌ Pendiente |
-| DELETE | `/notifications` | ❌ Pendiente |
-| GET | `/progress/me` | ❌ Pendiente |
-| PATCH | `/progress/me` | ❌ Pendiente |
-| POST | `/progress/me/episodes/:episodeId/complete` | ❌ Pendiente |
-| DELETE | `/progress/me` | ❌ Pendiente |
-| GET | `/cards/catalog` | ❌ Pendiente |
-| GET | `/cards/catalog/:type` | ❌ Pendiente |
-| GET | `/cards/me` | ❌ Pendiente |
-| GET | `/cards/me/:type` | ❌ Pendiente |
-| GET | `/cards/users/:userId` | ❌ Pendiente |
+| Método | Ruta | Estado |
+|--------|------|--------|
+| POST | `/auth/register` | ✅ |
+| POST | `/auth/login` | ✅ |
+| POST | `/auth/logout` | ✅ |
+| GET | `/auth/me` | ✅ |
+| PATCH | `/auth/change-password` | ✅ |
+| GET | `/users` | ✅ (admin) |
+| GET | `/users/ranking` | ✅ |
+| GET | `/users/:id` | ✅ |
+| PATCH | `/users/:id` | ✅ |
+| DELETE | `/users/:id` | ✅ |
+| PATCH | `/users/:id/avatar` | ✅ (multipart) |
+| GET | `/users/:id/stats` | ✅ |
+| GET | `/users/:id/followers` | ✅ |
+| GET | `/users/:id/following` | ✅ |
+| POST | `/users/:id/follow` | ✅ |
+| POST | `/users/:id/unfollow` | ✅ |
+| GET | `/users/:id/posts` | ✅ |
+| GET | `/users/:id/liked-posts` | ✅ |
+| GET | `/users/:id/bookmarked-posts` | ✅ |
+| GET | `/users/:id/commented-posts` | ✅ |
+| GET | `/posts` | ✅ |
+| GET | `/posts/share/:shareToken` | ✅ |
+| GET | `/posts/:id` | ✅ |
+| POST | `/posts` | ✅ (JSON + multipart) |
+| PATCH | `/posts/:id` | ✅ |
+| DELETE | `/posts/:id` | ✅ |
+| POST | `/posts/:id/like` | ✅ |
+| POST | `/posts/:id/bookmark` | ✅ |
+| PATCH | `/posts/:id/pdf` | ✅ (multipart) |
+| GET | `/comments/post/:postId` | ✅ |
+| POST | `/comments` | ✅ |
+| DELETE | `/comments/:id` | ✅ |
+| POST | `/comments/:id/like` | ✅ |
+| GET | `/notifications` | ✅ |
+| GET | `/notifications/unread-count` | ✅ |
+| PUT | `/notifications/:id/read` | ✅ |
+| PUT | `/notifications/mark-all-read` | ✅ |
+| DELETE | `/notifications/:id` | ✅ |
+| DELETE | `/notifications` | ✅ |
+| GET | `/progress/me` | ✅ |
+| PATCH | `/progress/me` | ✅ |
+| POST | `/progress/me/episodes/:episodeId/complete` | ✅ |
+| DELETE | `/progress/me` | ✅ |
+| GET | `/cards/catalog` | ✅ |
+| GET | `/cards/catalog/:type` | ✅ |
+| GET | `/cards/me` | ✅ |
+| GET | `/cards/me/:type` | ✅ |
+| GET | `/cards/users/:userId` | ✅ |
+| GET | `/serie/sagas` | ✅ |
+| GET | `/serie/sagas/:sagaId/arcs` | ✅ |
+| GET | `/serie/arcs/:arcId/episodes` | ✅ |
+| GET | `/serie/episodes/:episodeId` | ✅ |
+
+**No implementado (fuera de contrato LogPose v1):** retweets, search, feed visibility avanzado, cards v2, `POST /notifications`, rutas `users/me/*`, `GET /users/username/:username`, products/carts/orders del Postman legacy.
 
 ---
 
