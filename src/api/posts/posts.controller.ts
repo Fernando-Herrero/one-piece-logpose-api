@@ -5,7 +5,7 @@ import { Post } from "./posts.model.js";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { sendSuccess, sendError } from "../../utils/response.utils.js";
 import type { CreatePostInput, UpdatePostInput } from "./posts.schemas.js";
-import type { CreatePostRequest, PostRequest } from "./posts.types.js";
+import type { CreatePostRequest, MulterFile, PostRequest } from "./posts.types.js";
 import {
     POST_AUTHOR_POPULATE,
     PUBLIC_POST_FILTER,
@@ -63,6 +63,12 @@ export const createPost = asyncHandler(async (req: CreatePostRequest, res: Respo
 
 export const editPost = asyncHandler(async (req: PostRequest, res: Response) => {
     const updates = req.body as UpdatePostInput;
+
+    if (updates.images !== undefined) {
+        const previousImages = req.post?.images ?? [];
+        const removedImages = previousImages.filter((url) => !updates.images!.includes(url));
+        await Promise.all(removedImages.map((url) => deleteFromCloudinary(url)));
+    }
 
     const post = await Post.findOneAndUpdate({ _id: req.params.id, isDeleted: false }, updates, {
         new: true,
@@ -160,4 +166,44 @@ export const updatePostPdf = asyncHandler(async (req: PostRequest, res: Response
 
     if (!post) return sendError(res, "Post no encontrado", 404);
     return sendSuccess(res, serializePost(post), "PDF actualizado");
+});
+
+export const addPostImages = asyncHandler(async (req: PostRequest, res: Response) => {
+    const files = (req as PostRequest & { files?: MulterFile[] }).files;
+    if (!files?.length) return sendError(res, "No se enviaron imágenes", 400);
+
+    const currentImages = req.post?.images ?? [];
+    if (currentImages.length + files.length > 4) {
+        return sendError(res, "Máximo 4 imágenes por post", 400);
+    }
+
+    const uploadedImages = files.map((file) => file.path);
+    const post = await Post.findOneAndUpdate(
+        { _id: req.params.id, isDeleted: false },
+        { $push: { images: { $each: uploadedImages } } },
+        { new: true, runValidators: true }
+    ).populate(POST_AUTHOR_POPULATE);
+
+    if (!post) return sendError(res, "Post no encontrado", 404);
+    return sendSuccess(res, serializePost(post, getViewerId(req)), "Imágenes añadidas");
+});
+
+export const removePostImage = asyncHandler(async (req: PostRequest, res: Response) => {
+    const { url } = req.body as { url: string };
+    const currentImages = req.post?.images ?? [];
+
+    if (!currentImages.includes(url)) {
+        return sendError(res, "La imagen no pertenece a este post", 404);
+    }
+
+    await deleteFromCloudinary(url);
+
+    const post = await Post.findOneAndUpdate(
+        { _id: req.params.id, isDeleted: false },
+        { $pull: { images: url } },
+        { new: true, runValidators: true }
+    ).populate(POST_AUTHOR_POPULATE);
+
+    if (!post) return sendError(res, "Post no encontrado", 404);
+    return sendSuccess(res, serializePost(post, getViewerId(req)), "Imagen eliminada");
 });

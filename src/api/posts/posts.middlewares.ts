@@ -86,3 +86,15 @@ export const assertPostOwner = asyncHandler(async (req: PostRequest, res: Respon
 
     next();
 });
+
+export const assertPostHasPdf = asyncHandler(async (req: PostRequest, res: Response, next: NextFunction) => {
+    if (!req.post?.pdf) {
+        return sendError(
+            res,
+            "Este post no tiene PDF. Solo puedes actualizar el PDF de posts que ya tengan uno.",
+            400
+        );
+    }
+
+    next();
+});

@@ -64,5 +64,6 @@ const createPostMediaUploader = () =>
     });
 
 export const uploadAvatar = createImageUploader("onepiece/avatars");
+export const uploadPostImages = createImageUploader("onepiece/posts");
 export const uploadPdf = createPdfUploader("onepiece/pdfs");
 export const uploadPostMedia = createPostMediaUploader();

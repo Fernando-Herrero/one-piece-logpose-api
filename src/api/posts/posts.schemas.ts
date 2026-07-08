@@ -38,3 +38,9 @@ export const shareTokenParamSchema = z.object({
 
 export type CreatePostInput = z.infer<typeof createPostSchema>;
 export type UpdatePostInput = z.infer<typeof updatePostSchema>;
+
+export const removePostImageSchema = z.object({
+    url: z.string().min(1, "URL de imagen requerida"),
+});
+
+export type RemovePostImageInput = z.infer<typeof removePostImageSchema>;
